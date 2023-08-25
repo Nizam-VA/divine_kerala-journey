@@ -210,23 +210,24 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                               if (id > 0) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content:
-                                        const Text('Data added successfully'),
+                                    content: const Text(
+                                        'Data added successfully',
+                                        style: TextStyle(color: Colors.green)),
                                     backgroundColor: Colors.white,
                                     duration: Duration(seconds: 3),
                                   ),
                                 );
-                                Navigator.pop(context);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content:
-                                        const Text('Data added successfully'),
+                                    content: Text(
+                                      'Data didnt added',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
                                     backgroundColor: Colors.white,
                                     duration: Duration(seconds: 3),
                                   ),
                                 );
-                                Navigator.pop(context);
                               }
                             });
                           }

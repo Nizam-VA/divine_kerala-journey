@@ -26,11 +26,13 @@ class UserDatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''CREATE TABLE ${table} (${columnId} INTEGER PRIMARY KEY, 
-        ${columnPlace} TEXT, 
-        ${columnDescription} TEXT, 
-        ${columnCategory} TEXT,
-        ${columnImage} TEXT,)''');
+    await db.execute('''CREATE TABLE $table (
+      $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+      $columnPlace TEXT NOT NULL,
+      $columnDescription TEXT NOT NULL,
+      $columnCategory TEXT NOT NULL,
+      $columnImage TEXT NOT NULL)
+      ''');
   }
 
   Future<int> insertStory(UserStory userStory) async {

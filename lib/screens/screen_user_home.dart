@@ -1,3 +1,5 @@
+import 'package:devine_kerala_journey/database/stories_database_helper.dart';
+import 'package:devine_kerala_journey/model/user_story.dart';
 import 'package:devine_kerala_journey/screens/screen_about.dart';
 import 'package:devine_kerala_journey/screens/screen_settings.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
@@ -8,20 +10,43 @@ import 'package:devine_kerala_journey/widgets/drop_down.dart';
 import 'package:devine_kerala_journey/widgets/dropdown_select_district.dart';
 import 'package:flutter/material.dart';
 
-class ScreenUserHome extends StatelessWidget {
+class ScreenUserHome extends StatefulWidget {
+  ScreenUserHome({super.key});
+
+  @override
+  State<ScreenUserHome> createState() => _ScreenUserHomeState();
+}
+
+class _ScreenUserHomeState extends State<ScreenUserHome> {
+  UserDatabaseHelper databaseHelper = UserDatabaseHelper();
+
+  List<UserStory> userStories = [];
+
+  Future<void> _refresshUserStories() async {
+    final userStoriesList = await databaseHelper.getStories();
+    setState(() {
+      userStories = userStoriesList;
+    });
+  }
+
   List<String> _topPligrimes = [
     'assets/images/mkc-overview.jpg',
     'assets/images/koodal-manikyam - Copy.jpg',
     'assets/images/malayattoor.jpg',
     'assets/images/beemapalli.jpg'
   ];
+
   List<String> _userStories = [
     'assets/images/edappally.jpg',
     'assets/images/ponnani-masjid.jpg',
     'assets/images/shabarimala.jpg',
   ];
 
-  ScreenUserHome({super.key});
+  @override
+  void initState() {
+    _refresshUserStories();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +191,8 @@ class ScreenUserHome extends StatelessWidget {
             SizedBox(
               height: 8,
             ),
-            CarouselUserStories(imagesList: _userStories),
+            CarouselUserStories(
+                imagesList: [userStories[0].images, userStories[1].images]),
             SizedBox(
               height: 12,
             )
