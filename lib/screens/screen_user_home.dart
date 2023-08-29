@@ -192,7 +192,13 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
               height: 8,
             ),
             CarouselUserStories(
-                imagesList: [userStories[0].images, userStories[1].images]),
+              imagesList: [
+                userStories[userStories.length - 3].images,
+                userStories[userStories.length - 2].images,
+                userStories[userStories.length - 1].images
+              ],
+              userStories: userStories,
+            ),
             SizedBox(
               height: 12,
             )

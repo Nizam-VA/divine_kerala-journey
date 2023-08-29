@@ -1,9 +1,22 @@
+import 'dart:io';
+
+import 'package:devine_kerala_journey/database/stories_database_helper.dart';
+import 'package:devine_kerala_journey/screens/screen_user_update_story.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class ScreenUserStoryDetails extends StatelessWidget {
-  const ScreenUserStoryDetails({super.key});
+import '../model/user_story.dart';
 
+class ScreenUserStoryDetails extends StatefulWidget {
+  UserDatabaseHelper databaseHelper = UserDatabaseHelper();
+  UserStory userStory;
+  ScreenUserStoryDetails({super.key, required this.userStory});
+
+  @override
+  State<ScreenUserStoryDetails> createState() => _ScreenUserStoryDetailsState();
+}
+
+class _ScreenUserStoryDetailsState extends State<ScreenUserStoryDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,11 +32,30 @@ class ScreenUserStoryDetails extends StatelessWidget {
           color: Colors.white,
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.more_vert,
-            ),
+          PopupMenuButton(
+            onSelected: (value) {
+              if (value == 'edit') {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) =>
+                        ScreenUserUpdateStory(userStory: widget.userStory),
+                  ),
+                );
+              } else {
+                widget.databaseHelper.deleteStory(widget.userStory.id);
+                Navigator.of(context).pop();
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text('Edit'),
+                value: 'edit',
+              ),
+              PopupMenuItem(
+                child: Text('Delete'),
+                value: 'delete',
+              ),
+            ],
           ),
         ],
       ),
@@ -38,6 +70,11 @@ class ScreenUserStoryDetails extends StatelessWidget {
                 height: MediaQuery.of(context).size.height / 3,
                 decoration: BoxDecoration(
                   color: Colors.green,
+                  image: DecorationImage(
+                      image: FileImage(
+                        File(widget.userStory.images),
+                      ),
+                      fit: BoxFit.cover),
                 ),
               ),
               SizedBox(
@@ -59,7 +96,7 @@ class ScreenUserStoryDetails extends StatelessWidget {
                         vertical: 12,
                       ),
                       child: Text(
-                        'Shabarimala',
+                        widget.userStory.place,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -71,7 +108,7 @@ class ScreenUserStoryDetails extends StatelessWidget {
                         horizontal: 18,
                       ),
                       child: Text(
-                        "Sabarimala is a prominent Hindu pilgrimage site located in the state of Kerala, India. It is known for the Ayyappa Temple, dedicated to Lord Ayyappa, a deity revered as the son of Lord Shiva and Lord Vishnu in a composite form. The temple is situated on a hilltop within the Periyar Tiger Reserve, and its unique feature is that it attracts millions of devotees, primarily men, during the annual pilgrimage season from November to January. The pilgrimage is marked by a rigorous 41-day fasting and abstinence period observed by the devotees, followed by a challenging trek through the forested terrain to reach the temple. Sabarimala is renowned for its strict religious practices and customs, and the pilgrimage holds deep significance for devotees seeking spiritual growth and fulfillment. The temple's traditions and controversies surrounding issues like gender restrictions in the past have also garnered significant attention and debate",
+                        widget.userStory.description,
                         textAlign: TextAlign.justify,
                       ),
                     ),

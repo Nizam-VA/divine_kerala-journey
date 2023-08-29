@@ -1,9 +1,9 @@
 class UserStory {
-  final int id;
-  final String place;
-  final String description;
-  final String category;
-  final String images;
+  int id;
+  String place;
+  String description;
+  String category;
+  String images;
 
   UserStory(
       {required this.id,
