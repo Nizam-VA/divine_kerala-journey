@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "723592950937",
+    "project_id": "devine-kerala-journey",
+    "storage_bucket": "devine-kerala-journey.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723592950937:android:e2ab2519d36a6088f4b408",
+        "android_client_info": {
+          "package_name": "com.nizam.devine_kerala_journey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723592950937-sabtg0s0qpjfs3p33tgffabkc5ldd9i1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVkNRrm5gClY3IYhwRa_KWwM-1Nn3hY9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723592950937-sabtg0s0qpjfs3p33tgffabkc5ldd9i1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

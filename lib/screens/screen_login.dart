@@ -1,9 +1,11 @@
 import 'package:devine_kerala_journey/screens/screen_admin_home.dart';
 import 'package:devine_kerala_journey/screens/screen_signup.dart';
+import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ScreenLogin extends StatelessWidget {
+  AuthServices authServices = AuthServices();
   ScreenLogin({super.key});
 
   @override
@@ -51,7 +53,7 @@ class ScreenLogin extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (ctx) => ScreenAdminHome(),
@@ -126,7 +128,9 @@ class ScreenLogin extends StatelessWidget {
                       ),
                       backgroundColor: Colors.white,
                     ),
-                    onPressed: () async {},
+                    onPressed: () async {
+                      await authServices.signInWithGoogle(context);
+                    },
                     icon: Image.asset(
                       'assets/icons/search.png',
                       height: 16,

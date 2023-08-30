@@ -227,12 +227,11 @@ class _ScreenUserUpdateStoryState extends State<ScreenUserUpdateStory> {
                                     ),
                                   ),
                                 );
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            ScreenStoriesViewAll()),
-                                    (route) => false);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (ctx) => ScreenStoriesViewAll()),
+                                );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -242,12 +241,11 @@ class _ScreenUserUpdateStoryState extends State<ScreenUserUpdateStory> {
                                     ),
                                   ),
                                 );
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            ScreenStoriesViewAll()),
-                                    (route) => false);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (ctx) => ScreenStoriesViewAll()),
+                                );
                               }
                             });
                           }

@@ -17,12 +17,33 @@ class _ScreenStoriesViewAllState extends State<ScreenStoriesViewAll> {
   UserDatabaseHelper databaseHelper = UserDatabaseHelper();
 
   List<UserStory> userStories = [];
+  List<UserStory> filteredStories = [];
+  bool isSearching = false;
 
   Future<void> _refresshUserStories() async {
     final userStoriesList = await databaseHelper.getStories();
     setState(() {
       userStories = userStoriesList;
+      filteredStories = userStories;
     });
+  }
+
+  void _filterStories(String query) {
+    setState(
+      () {
+        if (query.isEmpty) {
+          filteredStories = userStories;
+        } else {
+          filteredStories = userStories
+              .where(
+                (story) => story.place.toLowerCase().contains(
+                      query.toLowerCase(),
+                    ),
+              )
+              .toList();
+        }
+      },
+    );
   }
 
   @override
@@ -41,89 +62,107 @@ class _ScreenStoriesViewAllState extends State<ScreenStoriesViewAll> {
           color: Colors.white,
         ),
         centerTitle: true,
-        title: Image.asset(
-          'assets/icons/divine-kerala-journey-logo.webp',
-          color: Colors.white,
-          height: 24,
-        ),
+        title: !isSearching
+            ? const Text(
+                'User Stories',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              )
+            : TextField(
+                style: const TextStyle(color: Colors.white),
+                onChanged: (query) {
+                  _filterStories(query);
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Search place here',
+                  hintStyle: TextStyle(color: Colors.white),
+                  focusColor: Colors.white,
+                ),
+              ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                isSearching = !isSearching;
+                if (!isSearching) {
+                  filteredStories = userStories;
+                }
+              });
+            },
             icon: Icon(
               Icons.search,
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: List.generate(userStories.length, (index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context)
-                      .push(
-                        MaterialPageRoute(
-                          builder: (ctx) => ScreenUserStoryDetails(
-                              userStory: userStories[index]),
+      body: filteredStories.isEmpty
+          ? const Center(
+              child: Text('No stories found.'),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: List.generate(filteredStories.length, (index) {
+                    return InkWell(
+                      onTap: () {
+                        isSearching = !isSearching;
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (ctx) => ScreenUserStoryDetails(
+                                    userStory: userStories[index]),
+                              ),
+                            )
+                            .then((value) => _refresshUserStories());
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: 12,
                         ),
-                      )
-                      .then((value) => _refresshUserStories());
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: 12,
-                  ),
-                  height: h / 4,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                        height: h / 4,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
 
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     blurRadius: 1,
-                    //     spreadRadius: -1,
-                    //   ),
-                    // ],
-                    color: Colors.black,
-                    image: DecorationImage(
-                      image: FileImage(File(userStories[index].images)),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 14,
-                          left: 12,
-                        ),
-                        child: Text(
-                          userStories[index].place,
-                          style: TextStyle(
-                            color: AppColors.notFavorite,
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     blurRadius: 1,
+                          //     spreadRadius: -1,
+                          //   ),
+                          // ],
+                          color: Colors.black,
+                          image: DecorationImage(
+                            image: FileImage(File(userStories[index].images)),
+                            fit: BoxFit.cover,
                           ),
-                          textAlign: TextAlign.center,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 14,
+                                left: 12,
+                              ),
+                              child: Text(
+                                userStories[index].place,
+                                style: TextStyle(
+                                  color: AppColors.notFavorite,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.favorite,
-                          color: AppColors.favorite,
-                        ),
-                      ),
-                    ],
-                  ),
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }

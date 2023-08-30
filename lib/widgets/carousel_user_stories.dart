@@ -11,9 +11,8 @@ import '../styles/app_colors.dart';
 
 class CarouselUserStories extends StatefulWidget {
   List<UserStory> userStories;
-  List<String> imagesList;
-  CarouselUserStories(
-      {super.key, required this.imagesList, required this.userStories});
+
+  CarouselUserStories({super.key, required this.userStories});
 
   @override
   State<CarouselUserStories> createState() => _CarouselUserStoriesState();
@@ -22,24 +21,24 @@ class CarouselUserStories extends StatefulWidget {
 class _CarouselUserStoriesState extends State<CarouselUserStories> {
   final UserDatabaseHelper databaseHelper = UserDatabaseHelper();
   int _currentIndex = 0;
-  var userStories;
+  List<UserStory> userStories = [];
 
-  Future<void> _refreshScreen() async {
-    final _userStories = databaseHelper.getStories();
+  Future<void> _refreshUserStories() async {
+    final userStoriesList = await databaseHelper.getStories();
     setState(() {
-      userStories = _userStories;
+      userStories = userStoriesList;
     });
   }
 
   @override
   void initState() {
-    _refreshScreen();
+    _refreshUserStories();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final imageSliders = widget.imagesList
+    final imageSliders = widget.userStories
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
               color: Colors.grey[300],
@@ -56,7 +55,7 @@ class _CarouselUserStoriesState extends State<CarouselUserStories> {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.black,
                             image: DecorationImage(
-                                image: FileImage(File(item)),
+                                image: FileImage(File(item.images)),
                                 fit: BoxFit.cover),
                           ),
                         ),
@@ -89,16 +88,16 @@ class _CarouselUserStoriesState extends State<CarouselUserStories> {
             ))
         .toList();
     return InkWell(
-      onTap: () {
+      onTap: () async {
         Navigator.of(context)
             .push(
               MaterialPageRoute(
                 builder: (ctx) => ScreenUserStoryDetails(
-                  userStory: userStories[0],
+                  userStory: userStories[_currentIndex],
                 ),
               ),
             )
-            .then((value) => _refreshScreen());
+            .then((value) => _refreshUserStories());
       },
       child: Column(
         children: [
@@ -123,9 +122,9 @@ class _CarouselUserStoriesState extends State<CarouselUserStories> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.imagesList.map(
+                children: widget.userStories.map(
                   (url) {
-                    int index = widget.imagesList.indexOf(url);
+                    int index = widget.userStories.indexOf(url);
                     return Container(
                       width: 10,
                       height: 10,

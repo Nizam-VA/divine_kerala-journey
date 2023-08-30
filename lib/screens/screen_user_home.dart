@@ -36,16 +36,16 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
     'assets/images/beemapalli.jpg'
   ];
 
-  List<String> _userStories = [
-    'assets/images/edappally.jpg',
-    'assets/images/ponnani-masjid.jpg',
-    'assets/images/shabarimala.jpg',
-  ];
-
   @override
   void initState() {
     _refresshUserStories();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _refresshUserStories();
+    super.didChangeDependencies();
   }
 
   @override
@@ -192,11 +192,6 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
               height: 8,
             ),
             CarouselUserStories(
-              imagesList: [
-                userStories[userStories.length - 3].images,
-                userStories[userStories.length - 2].images,
-                userStories[userStories.length - 1].images
-              ],
               userStories: userStories,
             ),
             SizedBox(

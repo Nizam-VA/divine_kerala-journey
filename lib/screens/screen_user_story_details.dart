@@ -41,9 +41,47 @@ class _ScreenUserStoryDetailsState extends State<ScreenUserStoryDetails> {
                         ScreenUserUpdateStory(userStory: widget.userStory),
                   ),
                 );
-              } else {
-                widget.databaseHelper.deleteStory(widget.userStory.id);
-                Navigator.of(context).pop();
+              }
+              if (value == 'delete') {
+                showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Delete Story'),
+                    content: const Text(
+                        'Are you sure you want to delete this story?'),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Delete'),
+                        onPressed: () async {
+                          await widget.databaseHelper
+                              .deleteStory(widget.userStory.id)
+                              .then((id) {
+                            if (id > 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Story deleted successfully')),
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Failed to delete story')),
+                              );
+                            }
+                          });
+                          Navigator.pop(ctx);
+                        },
+                      ),
+                    ],
+                  ),
+                );
               }
             },
             itemBuilder: (context) => [
@@ -121,6 +159,31 @@ class _ScreenUserStoryDetailsState extends State<ScreenUserStoryDetails> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  deleteStory(BuildContext ctx, int id) {
+    showDialog(
+      context: ctx,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Story'),
+        content: const Text('Are you sure you want to delete this story?'),
+        actions: [
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+          ),
+          TextButton(
+            child: const Text('Delete'),
+            onPressed: () {
+              widget.databaseHelper.deleteStory(id);
+              Navigator.pop(ctx);
+            },
+          ),
+        ],
       ),
     );
   }
