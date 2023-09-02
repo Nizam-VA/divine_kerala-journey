@@ -2,6 +2,7 @@ import 'package:devine_kerala_journey/database/stories_database_helper.dart';
 import 'package:devine_kerala_journey/model/user_story.dart';
 import 'package:devine_kerala_journey/screens/screen_about.dart';
 import 'package:devine_kerala_journey/screens/screen_settings.dart';
+import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:devine_kerala_journey/widgets/carousel_explore_kerala.dart';
 import 'package:devine_kerala_journey/widgets/carousel_top_pilgrimes.dart';
@@ -9,6 +10,8 @@ import 'package:devine_kerala_journey/widgets/carousel_user_stories.dart';
 import 'package:devine_kerala_journey/widgets/drop_down.dart';
 import 'package:devine_kerala_journey/widgets/dropdown_select_district.dart';
 import 'package:flutter/material.dart';
+
+final AuthServices _auth = AuthServices();
 
 class ScreenUserHome extends StatefulWidget {
   ScreenUserHome({super.key});
@@ -50,6 +53,9 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
 
   @override
   Widget build(BuildContext context) {
+    final _uname = _auth.googleSignIn.currentUser?.displayName;
+    final _uimage = _auth.googleSignIn.currentUser?.photoUrl;
+    final _uemail = _auth.googleSignIn.currentUser?.email;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
@@ -211,17 +217,17 @@ Widget? openDrawer(BuildContext context) {
       children: [
         UserAccountsDrawerHeader(
           currentAccountPicture: CircleAvatar(
-              // backgroundImage: NetworkImage(
-              //     '${authServices.firebaseAuth.currentUser?.photoURL}'),
-              ),
+            backgroundImage:
+                NetworkImage('${_auth.firebaseAuth.currentUser?.photoURL}'),
+          ),
           accountName: Text(
-            '',
+            '${_auth.firebaseAuth.currentUser?.displayName}',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           accountEmail: Text(
-            '',
+            '${_auth.firebaseAuth.currentUser?.email}',
           ),
           decoration: BoxDecoration(
             color: AppColors.primary,

@@ -1,11 +1,13 @@
 import 'package:devine_kerala_journey/screens/screen_admin_insert_data.dart';
 import 'package:devine_kerala_journey/screens/screen_admin_update.dart';
 import 'package:devine_kerala_journey/screens/screen_login.dart';
+import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ScreenAdminHome extends StatelessWidget {
-  const ScreenAdminHome({super.key});
+  AuthServices _auth = AuthServices();
+  ScreenAdminHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class ScreenAdminHome extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (ctx) => ScreenLogin()),

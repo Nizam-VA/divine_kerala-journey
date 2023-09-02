@@ -46,42 +46,16 @@ class _CarouselUserStoriesState extends State<CarouselUserStories> {
                 borderRadius: BorderRadius.circular(10),
                 child: Stack(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.black,
-                            image: DecorationImage(
-                                image: FileImage(File(item.images)),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3.25,
-                              height: MediaQuery.of(context).size.height / 9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue,
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3.25,
-                              height: MediaQuery.of(context).size.height / 9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black,
+                        image: DecorationImage(
+                            image: FileImage(File(item.images)),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
                   ],
                 ),
               ),

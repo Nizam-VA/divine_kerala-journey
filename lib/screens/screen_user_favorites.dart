@@ -1,8 +1,11 @@
+import 'package:devine_kerala_journey/screens/screen_login.dart';
 import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ScreenUserFavorites extends StatelessWidget {
+  AuthServices _auth = AuthServices();
   List<String> _topPligrimes = [
     'assets/images/mkc-overview.jpg',
     'assets/images/koodal-manikyam - Copy.jpg',
@@ -36,6 +39,17 @@ class ScreenUserFavorites extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await _auth.signOutOfGoogle(context);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (ctx) => ScreenLogin()),
+                  (route) => false);
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

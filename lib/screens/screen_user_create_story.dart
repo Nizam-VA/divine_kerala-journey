@@ -208,6 +208,10 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                                 .insertStory(userStory)
                                 .then((id) {
                               if (id > 0) {
+                                _placeController.text = '';
+                                _descriptionController.text = '';
+                                _imagePath = '';
+                                selectedCatagary = 'Select Category';
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: const Text(

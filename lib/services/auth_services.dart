@@ -1,13 +1,19 @@
-import 'package:devine_kerala_journey/screens/screen_user_home.dart';
+import 'package:devine_kerala_journey/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthServices {
   GoogleSignIn googleSignIn = GoogleSignIn();
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> signInWithGoogle(BuildContext context) async {
+  FirebaseAuth get firebaseAuth {
+    return _auth;
+  }
+
+  //signing with google account
+
+  Future signInWithGoogle(BuildContext context) async {
     try {
       GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
       if (googleSignInAccount != null) {
@@ -19,12 +25,9 @@ class AuthServices {
         );
         try {
           UserCredential userCredential =
-              await firebaseAuth.signInWithCredential(credential);
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (ctx) => ScreenUserHome(),
-            ),
-          );
+              await _auth.signInWithCredential(credential);
+          User? user = userCredential.user;
+          return _userFromFirebaseUser(user);
         } catch (e) {
           final snackBar = SnackBar(
             content: Text(
@@ -36,6 +39,7 @@ class AuthServices {
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          return null;
         }
       } else {
         final snackBar = SnackBar(
@@ -61,13 +65,67 @@ class AuthServices {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+    return null;
   }
 
-  Future<void> signOutOfGoogle(BuildContext context) async {
+  //sign in anon
+  Future signInAnon() async {
+    try {
+      UserCredential credential = await _auth.signInAnonymously();
+      User? user = credential.user;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print('$e ');
+      return null;
+    }
+  }
+
+  //register with email and password
+
+  Future registerWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = credential.user;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print('$e');
+      return null;
+    }
+  }
+
+  UserModel? _userFromFirebaseUser(User? user) {
+    return user != null ? UserModel(uid: user.uid) : null;
+  }
+
+  //signing in using email and password
+
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential credential = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = credential.user;
+
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  //sign out
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print('$e error done here');
+    }
+  }
+
+  Future signOutOfGoogle(BuildContext context) async {
     try {
       googleSignIn.signOut();
-      firebaseAuth.signOut();
-      Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+      _auth.signOut();
     } catch (e) {
       final snackBar = SnackBar(
         content: Text(
