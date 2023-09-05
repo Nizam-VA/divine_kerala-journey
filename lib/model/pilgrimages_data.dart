@@ -11,8 +11,8 @@ class PilgrimagesData {
   String air;
   String latitude;
   String longitude;
-  List<String> imageURL = [];
-  List<String> linkURL = [];
+  List<String> imageURL;
+  List<String> linkURL;
 
   PilgrimagesData({
     required this.id,
@@ -27,5 +27,7 @@ class PilgrimagesData {
     required this.air,
     required this.latitude,
     required this.longitude,
+    required this.imageURL,
+    required this.linkURL,
   });
 }

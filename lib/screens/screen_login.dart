@@ -243,7 +243,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                           height: 12,
                         ),
                         const Text(
-                            "By signing in , I agree to Divine Kerala Journery’s Terms and Prinvacy Plolicy",
+                            "By signing in , I agree to Divine Kerala journey's Terms and Prinvacy Plolicy",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 14,

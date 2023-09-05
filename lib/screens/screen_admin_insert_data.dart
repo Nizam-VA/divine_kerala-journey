@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
+import 'package:devine_kerala_journey/services/database_services.dart';
+import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
-import 'package:devine_kerala_journey/widgets/dropdown_select_category.dart';
-import 'package:devine_kerala_journey/widgets/dropdown_select_district.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,21 +15,45 @@ class ScreenAdminInsertData extends StatefulWidget {
 }
 
 class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
+  List<String> districts = [
+    'Alappuzha',
+    'Eranakulam',
+    'Thrissur',
+    'Malappuram',
+    'Kozhikkode',
+    'Kasaragode',
+    'Kannur',
+    'Wayanad',
+    'Palakkad',
+    'Kollam',
+    'Idukki',
+    'Pathanamthitta',
+    'Trivandrum'
+  ];
+  List<String> categories = [
+    'Masjid',
+    'Temple',
+    'Church',
+    'Synagogue',
+    'Historical place',
+    'Others'
+  ];
   int countImage = 0;
   int countLink = 0;
   final _formKey = GlobalKey<FormState>();
 
-  String place = '';
-  String location = '';
-  String description = '';
-  String district = '';
-  String category = '';
+  String id = DateTime.now().toString();
+  String? place;
+  String? location;
+  String? description;
+  String? district;
+  String? category;
   bool popular = false;
-  String rail = '';
-  String road = '';
-  String air = '';
-  String latitude = '';
-  String longitude = '';
+  String? rail;
+  String? road;
+  String? air;
+  String? latitude;
+  String? longitude;
   List<String> images = [];
   String link = '';
   List<String> links = [];
@@ -122,11 +147,32 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                 SizedBox(
                   height: 12,
                 ),
-                DropDownSelectDistrict(),
+                DropdownButtonFormField(
+                  decoration: inputDecoration.copyWith(label: Text('District')),
+                  value: districts[0],
+                  items: districts.map((dist) {
+                    return DropdownMenuItem(
+                      child: Text('$dist'),
+                      value: dist,
+                    );
+                  }).toList(),
+                  onChanged: ((value) => setState(() => district = value!)),
+                ),
                 const SizedBox(
                   height: 12,
                 ),
-                DropDownSelectCategory(),
+                DropdownButtonFormField(
+                  decoration:
+                      inputDecoration.copyWith(label: const Text('Category')),
+                  value: categories[0],
+                  items: categories.map((cat) {
+                    return DropdownMenuItem(
+                      child: Text('$cat'),
+                      value: cat,
+                    );
+                  }).toList(),
+                  onChanged: ((value) => setState(() => category = value!)),
+                ),
                 CheckboxListTile(
                   value: popular,
                   onChanged: (value) {
@@ -395,7 +441,28 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final pilgrim = PilgrimagesData(
+                          id: id,
+                          place: place!,
+                          location: location!,
+                          description: description!,
+                          district: district!,
+                          category: category!,
+                          popular: popular,
+                          road: road!,
+                          rail: rail!,
+                          air: air!,
+                          latitude: latitude!,
+                          longitude: longitude!,
+                          imageURL: images,
+                          linkURL: links,
+                        );
+                        print(pilgrim.air);
+                        await DatabasePilgrim(id: id).insertPilgrim(pilgrim);
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
