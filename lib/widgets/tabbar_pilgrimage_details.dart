@@ -1,3 +1,4 @@
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:devine_kerala_journey/widgets/near_by.dart';
 import 'package:devine_kerala_journey/widgets/photos.dart';
 import 'package:devine_kerala_journey/widgets/videos.dart';
@@ -6,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'about.dart';
 
 class TabBarPilgrimageDetails extends StatefulWidget {
-  const TabBarPilgrimageDetails({super.key});
+  final PilgrimagesData pilgrim;
+  const TabBarPilgrimageDetails({super.key, required this.pilgrim});
 
   @override
   State<TabBarPilgrimageDetails> createState() =>
@@ -38,9 +40,9 @@ class _TabBarPilgrimageDetailsState extends State<TabBarPilgrimageDetails> {
             Expanded(
               child: TabBarView(
                 children: [
-                  About(),
-                  Photos(),
-                  Videos(),
+                  About(pilgrim: widget.pilgrim),
+                  Photos(pilgrim: widget.pilgrim),
+                  Videos(pilgrim: widget.pilgrim),
                   NearBy(),
                 ],
               ),

@@ -23,17 +23,10 @@ class ScreenAdminHome extends StatelessWidget {
       },
       child: Scaffold(
           appBar: AppBar(
-            title: Text(
-              'Admin',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
+            title: const Text('Admin', style: TextStyle(color: Colors.white)),
             centerTitle: true,
             backgroundColor: AppColors.primary,
-            iconTheme: IconThemeData(
-              color: Colors.white,
-            ),
+            iconTheme: const IconThemeData(color: Colors.white),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -42,7 +35,7 @@ class ScreenAdminHome extends StatelessWidget {
                       MaterialPageRoute(builder: (ctx) => ScreenLogin()),
                       (route) => false);
                 },
-                icon: Icon(Icons.power_settings_new),
+                icon: const Icon(Icons.power_settings_new),
               ),
             ],
           ),
@@ -54,12 +47,10 @@ class ScreenAdminHome extends StatelessWidget {
                 ),
               );
             },
-            child: Row(
+            child: const Row(
               children: [
                 Icon(Icons.add),
-                Text(
-                  'ADD',
-                ),
+                Text('ADD'),
               ],
             ),
           ),

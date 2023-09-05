@@ -1,5 +1,4 @@
 import 'package:devine_kerala_journey/screens/screen_login.dart';
-import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -58,11 +57,11 @@ class ScreenUserFavorites extends StatelessWidget {
             children: List.generate(_topPligrimes.length, (index) {
               return InkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => ScreenPilgrimesDetails(),
-                    ),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (ctx) => ScreenPilgrimesDetails(),
+                  //   ),
+                  // );
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(

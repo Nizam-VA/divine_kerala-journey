@@ -34,9 +34,7 @@ class _PilgrimListState extends State<PilgrimList> {
               );
             },
             child: Container(
-              margin: const EdgeInsets.symmetric(
-                vertical: 12,
-              ),
+              margin: const EdgeInsets.symmetric(vertical: 12),
               height: MediaQuery.of(context).size.height / 5,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(

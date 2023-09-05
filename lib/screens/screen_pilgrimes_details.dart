@@ -1,42 +1,37 @@
+import 'dart:io';
+
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:devine_kerala_journey/widgets/tabbar_pilgrimage_details.dart';
 import 'package:flutter/material.dart';
 
 class ScreenPilgrimesDetails extends StatelessWidget {
-  const ScreenPilgrimesDetails({super.key});
+  PilgrimagesData pilgrim;
+  ScreenPilgrimesDetails({super.key, required this.pilgrim});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: Image.asset(
-          'assets/icons/divine-kerala-journey-logo.webp',
-          height: 24,
-          color: Colors.white,
-        ),
+        title: Image.asset('assets/icons/divine-kerala-journey-logo.webp',
+            height: 24, color: Colors.white),
         centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
-              Icons.favorite,
-            ),
+            icon: const Icon(Icons.favorite),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
-              Icons.more_vert,
-            ),
+            icon: const Icon(Icons.more_vert),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {},
-        child: Icon(Icons.comment),
+        child: const Icon(Icons.comment),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -48,7 +43,10 @@ class ScreenPilgrimesDetails extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 3,
-                    color: Colors.red,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: FileImage(File(pilgrim.imageURL[0])),
+                            fit: BoxFit.cover)),
                   ),
                   Positioned(
                     top: (MediaQuery.of(context).size.height / 3) - 20,
@@ -60,7 +58,7 @@ class ScreenPilgrimesDetails extends StatelessWidget {
                         height: MediaQuery.of(context).size.height,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20),
                           ),
@@ -69,7 +67,7 @@ class ScreenPilgrimesDetails extends StatelessWidget {
                             width: .3,
                           ),
                         ),
-                        child: TabBarPilgrimageDetails()),
+                        child: TabBarPilgrimageDetails(pilgrim: pilgrim)),
                   ),
                 ],
               ),

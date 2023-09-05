@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/screen_user_view_all_pilgrims.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -66,11 +66,11 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
         .toList();
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => ScreenPilgrimesDetails(),
-          ),
-        );
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (ctx) => ScreenPilgrimesDetails(),
+        //   ),
+        // );
       },
       child: Column(
         children: [
@@ -92,22 +92,42 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: widget.imagesList.map(
-              (url) {
-                int index = widget.imagesList.indexOf(url);
-                return Container(
-                  width: 10,
-                  height: 10,
-                  margin: EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentIndex == index
-                        ? AppColors.primary
-                        : Colors.grey[600],
-                  ),
-                );
-              },
-            ).toList(),
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: widget.imagesList.map(
+                  (url) {
+                    int index = widget.imagesList.indexOf(url);
+                    return Container(
+                      width: 10,
+                      height: 10,
+                      margin: EdgeInsets.symmetric(horizontal: 2),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _currentIndex == index
+                            ? AppColors.primary
+                            : Colors.grey[600],
+                      ),
+                    );
+                  },
+                ).toList(),
+              ),
+              SizedBox(
+                width: 30,
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (ctx) => ScreenUserViewAllPilgrims(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'View all',
+                ),
+              ),
+            ],
           ),
         ],
       ),

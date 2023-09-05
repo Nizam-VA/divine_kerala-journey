@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/screen_pilgrimes_details.dart';
 import '../styles/app_colors.dart';
 
 class CarouselExploreKerala extends StatefulWidget {
@@ -35,11 +34,11 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
         .toList();
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => ScreenPilgrimesDetails(),
-          ),
-        );
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (ctx) => ScreenPilgrimesDetails(),
+        //   ),
+        // );
       },
       child: Column(
         children: [

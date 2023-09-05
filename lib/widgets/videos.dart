@@ -1,8 +1,10 @@
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Videos extends StatefulWidget {
-  const Videos({super.key});
+  PilgrimagesData pilgrim;
+  Videos({super.key, required this.pilgrim});
 
   @override
   State<Videos> createState() => _VideosState();
