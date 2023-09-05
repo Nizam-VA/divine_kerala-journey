@@ -54,6 +54,13 @@ class DatabasePilgrim {
     });
   }
 
+  //delete data
+  Future deletePilgrim(String id) async {
+    return await pilgrimCollection.doc(id).delete().whenComplete(() {
+      print('$id is deleted');
+    });
+  }
+
   //pilgrim list from snapshot
   List<PilgrimagesData> _pilgrimListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {

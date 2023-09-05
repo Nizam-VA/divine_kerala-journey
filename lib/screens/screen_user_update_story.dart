@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
 import 'package:devine_kerala_journey/screens/screen_storeis_view_all.dart';
+import 'package:devine_kerala_journey/screens/screen_user.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -227,11 +228,10 @@ class _ScreenUserUpdateStoryState extends State<ScreenUserUpdateStory> {
                                     ),
                                   ),
                                 );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (ctx) => ScreenStoriesViewAll()),
-                                );
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (ctx) => ScreenUser()),
+                                    (route) => false);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
