@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:devine_kerala_journey/screens/screen_user_view_all_pilgrims.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../model/pilgrimages_data.dart';
+import '../screens/screen_pilgrimes_details.dart';
 
 class CarouselTopPilgrimes extends StatefulWidget {
-  List<String> imagesList;
-
-  CarouselTopPilgrimes({super.key, required this.imagesList});
+  CarouselTopPilgrimes({super.key});
 
   @override
   State<CarouselTopPilgrimes> createState() => _CarouselTopPilgrimesState();
@@ -14,9 +18,19 @@ class CarouselTopPilgrimes extends StatefulWidget {
 
 class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
   int _currentIndex = 0;
+  List<String> images = [];
+
   @override
   Widget build(BuildContext context) {
-    final imageSliders = widget.imagesList
+    final pilgrims = Provider.of<List<PilgrimagesData>>(context);
+    images = [
+      pilgrims[0].imageURL[0],
+      pilgrims[1].imageURL[0],
+      pilgrims[2].imageURL[0],
+      pilgrims[3].imageURL[0]
+    ];
+    print(pilgrims.length);
+    final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
               color: Colors.grey[300],
@@ -33,7 +47,8 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.black,
                             image: DecorationImage(
-                                image: AssetImage(item), fit: BoxFit.cover),
+                                image: FileImage(File(item)),
+                                fit: BoxFit.cover),
                           ),
                         ),
                         Column(
@@ -66,11 +81,13 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
         .toList();
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ScreenPilgrimesDetails(),
-        //   ),
-        // );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => ScreenPilgrimesDetails(
+              pilgrim: pilgrims[_currentIndex],
+            ),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -87,17 +104,15 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                   });
                 }),
           ),
-          SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.imagesList.map(
+                children: images.map(
                   (url) {
-                    int index = widget.imagesList.indexOf(url);
+                    int index = images.indexOf(url);
                     return Container(
                       width: 10,
                       height: 10,
@@ -119,7 +134,7 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (ctx) => ScreenUserViewAllPilgrims(),
+                      builder: (ctx) => const ScreenUserViewAllPilgrims(),
                     ),
                   );
                 },

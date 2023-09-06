@@ -31,11 +31,9 @@ class ScreenUserFavorites extends StatelessWidget {
           'assets/icons/divine-kerala-journey-logo.webp',
           color: Colors.white,
         ),
-        title: Text(
+        title: const Text(
           'Favorites',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
         actions: [

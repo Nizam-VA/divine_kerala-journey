@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:devine_kerala_journey/model/favorites.dart';
 import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../model/pilgrimages_data.dart';
+import '../styles/app_colors.dart';
 
 class UserPilgrimList extends StatefulWidget {
   const UserPilgrimList({super.key});
@@ -14,8 +16,11 @@ class UserPilgrimList extends StatefulWidget {
 }
 
 class _UserPilgrimListState extends State<UserPilgrimList> {
+  List<Favorites> favorites = [];
+  bool clicked = false;
   @override
   Widget build(BuildContext context) {
+    var favorite;
     final pilgrims = Provider.of<List<PilgrimagesData>>(context);
     return ListView.builder(
       itemCount: pilgrims.length,
@@ -40,15 +45,48 @@ class _UserPilgrimListState extends State<UserPilgrimList> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(pilgrims[index].place,
-                    style: const TextStyle(fontSize: 18, color: Colors.white)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 14,
+                      left: 12,
+                    ),
+                    child: Text(
+                      pilgrims[index].place,
+                      style: const TextStyle(color: AppColors.notFavorite),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        clicked = !clicked;
+                      });
+                      insertFavorite(favorite);
+                      print(favorites);
+                    },
+                    icon: const Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
               ),
             ),
           ),
         );
       },
     );
+  }
+
+  insertFavorite(Favorites favorite) {
+    if (clicked) {
+      favorites.add(favorite);
+    } else {
+      favorites.remove(favorite);
+    }
   }
 }

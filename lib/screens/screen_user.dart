@@ -32,29 +32,14 @@ class _ScreenUserState extends State<ScreenUser> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_filled),
-            label: 'Home',
-          ),
+              icon: Icon(Icons.create), label: 'Create Story'),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.create,
-            ),
-            label: 'Create Stoty',
-          ),
+              icon: Icon(Icons.image_outlined), label: 'Photo Gallery'),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.image_outlined,
-            ),
-            label: 'Photo Gallery',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-            ),
-            label: 'Favorites',
-          ),
+              icon: Icon(Icons.favorite), label: 'Favorites'),
         ],
         backgroundColor: AppColors.primary,
         selectedItemColor: Colors.yellow,

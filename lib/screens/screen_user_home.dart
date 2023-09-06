@@ -1,8 +1,11 @@
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:devine_kerala_journey/model/user_story.dart';
 import 'package:devine_kerala_journey/screens/screen_about.dart';
+import 'package:devine_kerala_journey/screens/screen_login.dart';
 import 'package:devine_kerala_journey/screens/screen_settings.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
+import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:devine_kerala_journey/widgets/carousel_explore_kerala.dart';
 import 'package:devine_kerala_journey/widgets/carousel_top_pilgrimes.dart';
@@ -10,6 +13,7 @@ import 'package:devine_kerala_journey/widgets/carousel_user_stories.dart';
 import 'package:devine_kerala_journey/widgets/drop_down.dart';
 import 'package:devine_kerala_journey/widgets/dropdown_select_district.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final AuthServices _auth = AuthServices();
 
@@ -56,154 +60,151 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
     final _uname = _auth.googleSignIn.currentUser?.displayName;
     final _uimage = _auth.googleSignIn.currentUser?.photoUrl;
     final _uemail = _auth.googleSignIn.currentUser?.email;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-        centerTitle: true,
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Scaffold.of(context).openDrawer();
-        //   },
-        //   tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-        //   icon: Image.asset(
-        //     'assets/icons/menu.png',
-        //     height: 24,
-        //   ),
-        // ),
-        title: Image.asset(
-          'assets/icons/divine-kerala-journey-logo.webp',
-          color: Colors.white,
-          height: 24,
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-            ),
+    return StreamProvider<List<PilgrimagesData>>.value(
+      value: DatabasePilgrim().pilgrims,
+      initialData: [],
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.primary,
+          iconTheme: IconThemeData(
+            color: Colors.white,
           ),
-        ],
-      ),
-      drawer: openDrawer(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 24,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Top Pilgrimes',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
+          centerTitle: true,
+          // leading: IconButton(
+          //   onPressed: () {
+          //     Scaffold.of(context).openDrawer();
+          //   },
+          //   tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+          //   icon: Image.asset(
+          //     'assets/icons/menu.png',
+          //     height: 24,
+          //   ),
+          // ),
+          title: Image.asset(
+            'assets/icons/divine-kerala-journey-logo.webp',
+            color: Colors.white,
+            height: 24,
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search,
               ),
             ),
-            SizedBox(
-              height: 8,
-            ),
-            CarouselTopPilgrimes(imagesList: _topPligrimes),
-            SizedBox(
-              height: 12,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Explore Kerala',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+          ],
+        ),
+        drawer: openDrawer(context),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 24,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'Top Pilgrims',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    textAlign: TextAlign.left,
                   ),
-                  textAlign: TextAlign.left,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            CarouselExploreKerala(imagesList: _topPligrimes),
-            SizedBox(
-              height: 12,
-            ),
-            Container(
-              padding: EdgeInsets.all(12),
-              margin: EdgeInsets.all(8),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: DropDownSelectDistrict(),
+              const SizedBox(height: 8),
+              CarouselTopPilgrimes(),
+              SizedBox(
+                height: 12,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: DropDownFormField(),
+                  child: Text(
+                    'Explore Kerala',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.5,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                      ),
-                      child: Text(
-                        'Search',
-                        style: TextStyle(
-                          color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              CarouselExploreKerala(),
+              SizedBox(
+                height: 12,
+              ),
+              Container(
+                padding: EdgeInsets.all(12),
+                margin: EdgeInsets.all(8),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: DropDownSelectDistrict(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: DropDownFormField(),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                        ),
+                        child: Text(
+                          'Search',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                ),
-                child: Text(
-                  'Kerala Stories',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.left,
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            CarouselUserStories(
-              userStories: userStories,
-            ),
-            SizedBox(
-              height: 12,
-            )
-          ],
+              SizedBox(
+                height: 12,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                  ),
+                  child: Text(
+                    'Kerala Stories',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              CarouselUserStories(
+                userStories: userStories,
+              ),
+              SizedBox(
+                height: 12,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -222,41 +223,30 @@ Widget? openDrawer(BuildContext context) {
           ),
           accountName: Text(
             '${_auth.firebaseAuth.currentUser?.displayName}',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           accountEmail: Text(
             '${_auth.firebaseAuth.currentUser?.email}',
           ),
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-          ),
+          decoration: const BoxDecoration(color: AppColors.primary),
         ),
         ListTile(
-          leading: Icon(
-            Icons.video_camera_back_outlined,
-            color: AppColors.primary,
-          ),
-          title: Text('Videos'),
+          leading: const Icon(Icons.video_camera_back_outlined,
+              color: AppColors.primary),
+          title: const Text('Videos'),
           onTap: () {},
         ),
         ListTile(
-          leading: Icon(
-            Icons.photo,
-            color: AppColors.primary,
-          ),
-          title: Text('Photos'),
+          leading: const Icon(Icons.photo, color: AppColors.primary),
+          title: const Text('Photos'),
           onTap: () {
             Navigator.pushNamed(context, 'first');
           },
         ),
         ListTile(
-          leading: Icon(
-            Icons.info_outline_rounded,
-            color: AppColors.primary,
-          ),
-          title: Text('About Us'),
+          leading:
+              const Icon(Icons.info_outline_rounded, color: AppColors.primary),
+          title: const Text('About Us'),
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -266,17 +256,25 @@ Widget? openDrawer(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(
-            Icons.settings,
-            color: AppColors.primary,
-          ),
-          title: Text('Settings'),
+          leading: const Icon(Icons.settings, color: AppColors.primary),
+          title: const Text('Settings'),
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => ScreenSettings(),
               ),
             );
+          },
+        ),
+        ListTile(
+          leading:
+              const Icon(Icons.power_settings_new, color: AppColors.primary),
+          title: const Text('Logout'),
+          onTap: () async {
+            await _auth.signOutOfGoogle(context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (ctx) => ScreenLogin()),
+                (route) => false);
           },
         ),
       ],

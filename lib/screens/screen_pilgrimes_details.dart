@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:devine_kerala_journey/database/favorites_database.dart';
+import 'package:devine_kerala_journey/model/favorites.dart';
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:devine_kerala_journey/widgets/tabbar_pilgrimage_details.dart';
 import 'package:flutter/material.dart';
 
 class ScreenPilgrimesDetails extends StatelessWidget {
+  DatabaseFavorites databaseFavorites = DatabaseFavorites();
   PilgrimagesData pilgrim;
   ScreenPilgrimesDetails({super.key, required this.pilgrim});
 
@@ -20,12 +23,11 @@ class ScreenPilgrimesDetails extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              final favorite = Favorites(id: 0, pilgrim: pilgrim);
+              databaseFavorites.insertFavorites(favorite);
+            },
             icon: const Icon(Icons.favorite),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
           ),
         ],
       ),

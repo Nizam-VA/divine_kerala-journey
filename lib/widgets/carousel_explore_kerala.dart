@@ -1,12 +1,15 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../model/pilgrimages_data.dart';
 import '../styles/app_colors.dart';
 
 class CarouselExploreKerala extends StatefulWidget {
-  List<String> imagesList;
-
-  CarouselExploreKerala({super.key, required this.imagesList});
+  CarouselExploreKerala({super.key});
 
   @override
   State<CarouselExploreKerala> createState() => _CarouselExploreKeralaState();
@@ -14,9 +17,17 @@ class CarouselExploreKerala extends StatefulWidget {
 
 class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
   int _currentIndex = 0;
+  List<String> images = [];
   @override
   Widget build(BuildContext context) {
-    final imageSliders = widget.imagesList
+    final pilgrims = Provider.of<List<PilgrimagesData>>(context);
+    images = [
+      pilgrims[0].imageURL[0],
+      pilgrims[1].imageURL[0],
+      pilgrims[2].imageURL[0],
+      pilgrims[3].imageURL[0]
+    ];
+    final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
               color: Colors.grey[300],
@@ -26,7 +37,7 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
                   decoration: BoxDecoration(
                     color: Colors.red,
                     image: DecorationImage(
-                        image: AssetImage(item), fit: BoxFit.cover),
+                        image: FileImage(File(item)), fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -34,11 +45,12 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
         .toList();
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ScreenPilgrimesDetails(),
-        //   ),
-        // );
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) =>
+                ScreenPilgrimesDetails(pilgrim: pilgrims[_currentIndex]),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -60,9 +72,9 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: widget.imagesList.map(
+            children: images.map(
               (url) {
-                int index = widget.imagesList.indexOf(url);
+                int index = images.indexOf(url);
                 return Container(
                   width: 10,
                   height: 10,

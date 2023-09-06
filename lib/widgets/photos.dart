@@ -23,7 +23,8 @@ class Photos extends StatelessWidget {
                   width: .5,
                 ),
                 image: DecorationImage(
-                    image: FileImage(File(pilgrim.imageURL[index])))),
+                    image: FileImage(File(pilgrim.imageURL[index])),
+                    fit: BoxFit.cover)),
           );
         },
       ),
