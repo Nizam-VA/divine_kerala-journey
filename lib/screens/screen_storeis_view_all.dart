@@ -35,11 +35,8 @@ class _ScreenStoriesViewAllState extends State<ScreenStoriesViewAll> {
           filteredStories = userStories;
         } else {
           filteredStories = userStories
-              .where(
-                (story) => story.place.toLowerCase().contains(
-                      query.toLowerCase(),
-                    ),
-              )
+              .where((story) =>
+                  story.place.toLowerCase().contains(query.toLowerCase()))
               .toList();
         }
       },
@@ -75,7 +72,7 @@ class _ScreenStoriesViewAllState extends State<ScreenStoriesViewAll> {
                   _filterStories(query);
                 },
                 decoration: const InputDecoration(
-                  hintText: 'Search place here',
+                  hintText: 'Search story here',
                   hintStyle: TextStyle(color: Colors.white),
                   focusColor: Colors.white,
                 ),
@@ -108,14 +105,12 @@ class _ScreenStoriesViewAllState extends State<ScreenStoriesViewAll> {
                     return InkWell(
                       onTap: () {
                         isSearching = !isSearching;
-                        Navigator.of(context)
-                            .push(
-                              MaterialPageRoute(
-                                builder: (ctx) => ScreenUserStoryDetails(
-                                    userStory: userStories[index]),
-                              ),
-                            )
-                            .then((value) => _refresshUserStories());
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => ScreenUserStoryDetails(
+                                userStory: userStories[index]),
+                          ),
+                        );
                       },
                       child: Container(
                         margin: EdgeInsets.symmetric(

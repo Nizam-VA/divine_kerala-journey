@@ -12,3 +12,6 @@ final inputDecoration = InputDecoration(
   filled: true,
   fillColor: Colors.white,
 );
+
+const SAVE_KEY_NAME = 'UserLoggedIn';
+const IS_FAVORITE = 'AddFavorites';

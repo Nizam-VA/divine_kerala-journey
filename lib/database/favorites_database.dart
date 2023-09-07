@@ -7,7 +7,8 @@ class DatabaseFavorites {
   static const table = 'favorites';
 
   static const columnId = '_id';
-  static const columnPilgrim = 'pilgrim';
+  static const columnPlace = 'place';
+  static const columnImage = 'image';
 
   static Database? _database;
 
@@ -24,18 +25,17 @@ class DatabaseFavorites {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''CREATE TABLE $table (
-      $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $columnPilgrim TEXT NOT NULL,
-      ''');
+  $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+  $columnPlace TEXT NOT NULL,
+  $columnImage TEXT NOT NULL)
+''');
   }
 
   Future<int> insertFavorites(Favorites favorite) async {
     final db = await database;
     return await db.insert(
       table,
-      {
-        columnPilgrim: favorite.pilgrim,
-      },
+      {columnPlace: favorite.place, columnImage: favorite.image},
     );
   }
 
@@ -45,9 +45,9 @@ class DatabaseFavorites {
     return List.generate(
       maps.length,
       (index) => Favorites(
-        id: maps[index][columnId],
-        pilgrim: maps[index][columnPilgrim],
-      ),
+          id: maps[index][columnId],
+          place: maps[index][columnPlace],
+          image: maps[index][columnImage]),
     );
   }
 

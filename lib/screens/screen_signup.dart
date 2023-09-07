@@ -4,6 +4,9 @@ import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:devine_kerala_journey/shared/loading.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../shared/constants.dart';
 
 class ScreenSignUp extends StatefulWidget {
   ScreenSignUp({super.key});
@@ -170,6 +173,9 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
                                 } else {
                                   final DatabaseUser _user = DatabaseUser();
                                   _user.insertUser(result.uid, name, email);
+                                  final _pref =
+                                      await SharedPreferences.getInstance();
+                                  await _pref.setBool(SAVE_KEY_NAME, true);
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (ctx) => ScreenUser()));

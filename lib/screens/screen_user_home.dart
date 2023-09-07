@@ -14,6 +14,7 @@ import 'package:devine_kerala_journey/widgets/drop_down.dart';
 import 'package:devine_kerala_journey/widgets/dropdown_select_district.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final AuthServices _auth = AuthServices();
 
@@ -57,9 +58,8 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
 
   @override
   Widget build(BuildContext context) {
-    final _uname = _auth.googleSignIn.currentUser?.displayName;
-    final _uimage = _auth.googleSignIn.currentUser?.photoUrl;
-    final _uemail = _auth.googleSignIn.currentUser?.email;
+    final _uname = _auth.firebaseAuth.currentUser?.displayName;
+    final _uemail = _auth.firebaseAuth.currentUser?.email;
     return StreamProvider<List<PilgrimagesData>>.value(
       value: DatabasePilgrim().pilgrims,
       initialData: [],
@@ -88,9 +88,7 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
           actions: [
             IconButton(
               onPressed: () {},
-              icon: Icon(
-                Icons.search,
-              ),
+              icon: const Icon(Icons.search),
             ),
           ],
         ),
@@ -98,7 +96,7 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               SizedBox(
@@ -114,13 +112,13 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
               ),
               const SizedBox(height: 8),
               CarouselTopPilgrimes(),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 8,
                   ),
                   child: Text(
@@ -133,11 +131,11 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               CarouselExploreKerala(),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               Container(
@@ -153,7 +151,7 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: DropDownSelectDistrict(),
                     ),
-                    Padding(
+                    const Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: DropDownFormField(),
                     ),
@@ -164,24 +162,22 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                         ),
-                        child: Text(
+                        child: const Text(
                           'Search',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 8,
                   ),
                   child: Text(
@@ -194,13 +190,13 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               CarouselUserStories(
                 userStories: userStories,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               )
             ],
@@ -271,6 +267,8 @@ Widget? openDrawer(BuildContext context) {
               const Icon(Icons.power_settings_new, color: AppColors.primary),
           title: const Text('Logout'),
           onTap: () async {
+            final _pref = await SharedPreferences.getInstance();
+            await _pref.clear();
             await _auth.signOutOfGoogle(context);
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (ctx) => ScreenLogin()),

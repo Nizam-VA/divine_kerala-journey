@@ -26,10 +26,8 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
     images = [
       pilgrims[0].imageURL[0],
       pilgrims[1].imageURL[0],
-      pilgrims[2].imageURL[0],
-      pilgrims[3].imageURL[0]
     ];
-    print(pilgrims.length);
+
     final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
@@ -38,42 +36,26 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                 borderRadius: BorderRadius.circular(10),
                 child: Stack(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.black,
-                            image: DecorationImage(
-                                image: FileImage(File(item)),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3.25,
-                              height: MediaQuery.of(context).size.height / 9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue,
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3.25,
-                              height: MediaQuery.of(context).size.height / 9,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black,
+                        image: DecorationImage(
+                            image: FileImage(File(item)), fit: BoxFit.cover),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12, left: 12),
+                      child: Text(
+                        pilgrims[_currentIndex].place,
+                        style: const TextStyle(
+                            color: AppColors.notFavorite,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ],
                 ),
               ),

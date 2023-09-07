@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
+import 'package:devine_kerala_journey/screens/screen_admin_home.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../services/database_services.dart';
 
 class ScreenAdminUpdate extends StatefulWidget {
   PilgrimagesData pilgrim;
@@ -180,7 +185,9 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                 CheckboxListTile(
                   value: popular,
                   onChanged: (bool? value) {
-                    value = value;
+                    setState(() {
+                      popular = value!;
+                    });
                   },
                   title: const Text('Popular'),
                 ),
@@ -286,28 +293,66 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   height: 12,
                 ),
                 Column(
-                    children:
-                        List.generate(widget.pilgrim.imageURL.length, (index) {
-                  return Visibility(
-                    visible: true,
-                    child: Container(
-                      margin: EdgeInsets.all(8),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 6,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all()),
-                    ),
+                    children: List.generate(images.length, (index) {
+                  return Row(
+                    children: [
+                      Visibility(
+                        visible: true,
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          width: MediaQuery.of(context).size.width / 1.4,
+                          height: MediaQuery.of(context).size.height / 6,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(),
+                            image: DecorationImage(
+                                image: index < images.length
+                                    ? FileImage(
+                                        File(images[index]),
+                                      )
+                                    : FileImage(
+                                        File(''),
+                                      ),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            images.removeAt(index);
+                            countImage--;
+                            print(images);
+                          });
+                        },
+                        icon: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Colors.red,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 12,
+                            child: Icon(
+                              Icons.remove,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 })),
                 const SizedBox(
                   height: 12,
                 ),
                 TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      countImage++;
-                    });
+                  onPressed: () async {
+                    await bottomSheet(context).then(
+                      (value) {
+                        setState(() {
+                          countImage++;
+                        });
+                      },
+                    );
                   },
                   icon: Icon(Icons.add),
                   label: const Text(
@@ -315,20 +360,67 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 Column(
-                    children:
-                        List.generate(widget.pilgrim.linkURL.length, (index) {
+                    children: List.generate(links.length, (index) {
                   return Visibility(
-                      visible: true,
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            hintText: 'YouTube link${index + 1}'),
-                      ));
+                    visible: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.4,
+                          child: Form(
+                            child: TextFormField(
+                              initialValue: links[index],
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter the youtube link';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  link = value;
+                                });
+                              },
+                              decoration: InputDecoration(
+                                  hintText: 'YouTube link ${index + 1}'),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              countLink--;
+                              links.removeAt(index);
+                              print(links);
+                            });
+                          },
+                          icon: CircleAvatar(
+                            radius: 14,
+                            backgroundColor: Colors.red,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 12,
+                              child: Icon(
+                                Icons.remove,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
                 })),
                 TextButton.icon(
                   onPressed: () {
+                    if (link.isNotEmpty) {
+                      links.add(link);
+                    }
                     setState(() {
                       countLink++;
                     });
+                    print(links);
                   },
                   icon: Icon(Icons.add),
                   label: const Text(
@@ -338,14 +430,37 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        final pilgrim = PilgrimagesData(
+                          id: widget.pilgrim.id,
+                          place: _placeController.text,
+                          location: _locationController.text,
+                          description: _descriptionController.text,
+                          district: district!,
+                          category: category!,
+                          popular: popular!,
+                          road: _roadController.text,
+                          rail: _railController.text,
+                          air: _airController.text,
+                          latitude: _latController.text,
+                          longitude: _longController.text,
+                          imageURL: images,
+                          linkURL: links,
+                        );
+                        print(pilgrim.air);
+                        await DatabasePilgrim(id: id).insertPilgrim(pilgrim);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (ctx) => ScreenAdminHome()),
+                            (route) => false);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
-                    child: Text('Save'),
+                    child: const Text('Update'),
                   ),
                 ),
               ],

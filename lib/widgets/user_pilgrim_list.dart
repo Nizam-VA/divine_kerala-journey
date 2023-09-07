@@ -60,19 +60,6 @@ class _UserPilgrimListState extends State<UserPilgrimList> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        clicked = !clicked;
-                      });
-                      insertFavorite(favorite);
-                      print(favorites);
-                    },
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                    ),
-                  )
                 ],
               ),
             ),

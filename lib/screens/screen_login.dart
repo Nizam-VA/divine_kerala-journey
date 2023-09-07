@@ -2,9 +2,11 @@ import 'package:devine_kerala_journey/screens/screen_admin_home.dart';
 import 'package:devine_kerala_journey/screens/screen_signup.dart';
 import 'package:devine_kerala_journey/screens/screen_user.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
+import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/shared/loading.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenLogin extends StatefulWidget {
   ScreenLogin({super.key});
@@ -107,8 +109,12 @@ class _ScreenLoginState extends State<ScreenLogin> {
                                     loading = false;
                                   });
                                 } else {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (ctx) => ScreenAdminHome()));
+                                  final _pref =
+                                      await SharedPreferences.getInstance();
+                                  await _pref.setBool(SAVE_KEY_NAME, true);
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (ctx) => ScreenAdminHome()));
                                 }
                               }
                             },
@@ -139,6 +145,9 @@ class _ScreenLoginState extends State<ScreenLogin> {
                                       loading = false;
                                     });
                                   } else {
+                                    final _pref =
+                                        await SharedPreferences.getInstance();
+                                    await _pref.setBool(SAVE_KEY_NAME, true);
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) => ScreenUser()));
@@ -222,6 +231,9 @@ class _ScreenLoginState extends State<ScreenLogin> {
                                   loading = false;
                                 });
                               } else {
+                                final _pref =
+                                    await SharedPreferences.getInstance();
+                                await _pref.setBool(SAVE_KEY_NAME, true);
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) => ScreenUser()));

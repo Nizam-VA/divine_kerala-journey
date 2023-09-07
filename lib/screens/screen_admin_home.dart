@@ -7,6 +7,7 @@ import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:devine_kerala_journey/widgets/pilgrim_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenAdminHome extends StatelessWidget {
   AuthServices _auth = AuthServices();
@@ -30,8 +31,10 @@ class ScreenAdminHome extends StatelessWidget {
             actions: [
               IconButton(
                 onPressed: () async {
-                  Navigator.pushAndRemoveUntil(
-                      context,
+                  final _pref = await SharedPreferences.getInstance();
+                  await _pref.clear();
+                  await _auth.signOutOfGoogle(context);
+                  Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (ctx) => ScreenLogin()),
                       (route) => false);
                 },

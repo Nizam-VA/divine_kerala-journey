@@ -101,4 +101,65 @@ class DatabasePilgrim {
   }
 
   //pilgrim from firebase
+  PilgrimagesData _pilgrimDataFromSnapshot(DocumentSnapshot snapshot) {
+    return PilgrimagesData(
+        id: snapshot['id'],
+        place: snapshot['place_name'],
+        location: snapshot['location'],
+        description: snapshot['description'],
+        district: snapshot['district'],
+        category: snapshot['category'],
+        popular: snapshot['popular'],
+        road: snapshot['road'],
+        rail: snapshot['rail'],
+        air: snapshot['air'],
+        latitude: snapshot['latitude'],
+        longitude: snapshot['longitude'],
+        imageURL: snapshot['images'],
+        linkURL: snapshot['links']);
+  }
+
+  //retrieve pilgrim object by id
+
+  Future<PilgrimagesData?> getPilgrimageById(String id) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await FirebaseFirestore.instance.collection('pilgrims').doc(id).get();
+
+      if (documentSnapshot.exists) {
+        // Use the factory constructor to create a PilgrimagesData object from the Firestore document
+        return PilgrimagesData(
+          id: documentSnapshot['id'],
+          place: documentSnapshot['place_name'],
+          location: documentSnapshot['location'],
+          description: documentSnapshot['description'],
+          district: documentSnapshot['district'],
+          category: documentSnapshot['category'],
+          popular: documentSnapshot['popular'],
+          road: documentSnapshot['road'],
+          rail: documentSnapshot['rail'],
+          air: documentSnapshot['air'],
+          latitude: documentSnapshot['latitude'],
+          longitude: documentSnapshot['longitude'],
+          imageURL: List<String>.from(documentSnapshot['images']),
+          linkURL: List<String>.from(documentSnapshot['links']),
+        );
+      } else {
+        // Document with the specified ID does not exist
+        return null;
+      }
+    } catch (e) {
+      print("Error getting document by ID: $e");
+      return null;
+    }
+  }
 }
+
+
+
+
+  
+
+
+  //retrieve pilgrim object by id
+  

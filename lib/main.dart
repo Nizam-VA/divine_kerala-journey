@@ -1,5 +1,5 @@
-import 'package:devine_kerala_journey/screens/screen_login.dart';
 import 'package:devine_kerala_journey/screens/screen_user_image_gallery.dart';
+import 'package:devine_kerala_journey/screens/screensplash.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.system,
-      home: ScreenLogin(),
+      home: ScreenSplash(),
       routes: {'first': (context) => ScreenUserImageGallery()},
     );
   }

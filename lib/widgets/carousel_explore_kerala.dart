@@ -21,11 +21,13 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
   @override
   Widget build(BuildContext context) {
     final pilgrims = Provider.of<List<PilgrimagesData>>(context);
+    if (pilgrims.isEmpty) {
+      // Handle the case when the 'pilgrims' list is empty.
+      return Center(child: Text("No data available"));
+    }
     images = [
       pilgrims[0].imageURL[0],
       pilgrims[1].imageURL[0],
-      pilgrims[2].imageURL[0],
-      pilgrims[3].imageURL[0]
     ];
     final imageSliders = images
         .map((item) => Container(

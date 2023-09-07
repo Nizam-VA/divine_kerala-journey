@@ -461,6 +461,7 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                         );
                         print(pilgrim.air);
                         await DatabasePilgrim(id: id).insertPilgrim(pilgrim);
+                        Navigator.pop(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(

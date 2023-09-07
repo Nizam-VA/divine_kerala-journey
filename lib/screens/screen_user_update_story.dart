@@ -119,7 +119,6 @@ class _ScreenUserUpdateStoryState extends State<ScreenUserUpdateStory> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Text(widget.userStory.id.toString()),
                     TextFormField(
                       controller: _placeController,
                       validator: (value) {
