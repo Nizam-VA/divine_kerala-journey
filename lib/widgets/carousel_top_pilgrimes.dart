@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:devine_kerala_journey/screens/screen_user_view_all_pilgrims.dart';
+import 'package:devine_kerala_journey/screens/all_pilgrims/screen_user_view_all_pilgrims.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

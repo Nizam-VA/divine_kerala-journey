@@ -14,14 +14,6 @@ class DatabaseUser {
       print("$name created");
     });
   }
-
-  List<String>? getUser(String uid) {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection('users').doc(uid);
-    documentReference.get().then((value) {
-      return [value['name'], value['email']];
-    });
-  }
 }
 
 class DatabasePilgrim {

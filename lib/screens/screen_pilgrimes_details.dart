@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:devine_kerala_journey/database/favorites_database.dart';
 import 'package:devine_kerala_journey/model/favorites.dart';
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:devine_kerala_journey/widgets/tabbar_pilgrimage_details.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenPilgrimesDetails extends StatefulWidget {
   PilgrimagesData pilgrim;
@@ -121,19 +119,5 @@ class _ScreenPilgrimesDetailsState extends State<ScreenPilgrimesDetails> {
         ),
       ),
     );
-  }
-
-  Future<void> checkPilgrimFavorite() async {
-    final _pref = await SharedPreferences.getInstance();
-    final _isFavorite = _pref.getBool(IS_FAVORITE);
-    if (_isFavorite == null || _isFavorite == false) {
-      setState(() {
-        isFavorite = false;
-      });
-    } else {
-      setState(() {
-        isFavorite = true;
-      });
-    }
   }
 }

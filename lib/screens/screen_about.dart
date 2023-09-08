@@ -16,7 +16,7 @@ class ScreenAbout extends StatelessWidget {
           color: Colors.white,
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white,
         ),
       ),

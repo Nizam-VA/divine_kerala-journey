@@ -1,5 +1,7 @@
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
+import 'package:devine_kerala_journey/screens/screen_view_map.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
   PilgrimagesData pilgrim;
@@ -33,7 +35,14 @@ class About extends StatelessWidget {
                   Column(
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => ScreenViewMap(
+                                    latitude: pilgrim.latitude,
+                                    longitude: pilgrim.longitude,
+                                    place: pilgrim.place,
+                                  )));
+                        },
                         icon: CircleAvatar(
                           radius: 21,
                           backgroundColor: Colors.black,
@@ -52,7 +61,9 @@ class About extends StatelessWidget {
                   Column(
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          launchGoogleMaps(pilgrim.location);
+                        },
                         icon: CircleAvatar(
                           radius: 21,
                           backgroundColor: Colors.black,
@@ -112,5 +123,13 @@ class About extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void launchGoogleMaps(String locationLink) async {
+    if (await canLaunchUrl(Uri.parse(locationLink))) {
+      await launchUrl(Uri.parse(locationLink));
+    } else {
+      throw ('Could not launch $locationLink');
+    }
   }
 }
