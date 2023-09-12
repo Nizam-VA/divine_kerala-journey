@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +11,7 @@ class Photos extends StatelessWidget {
       child: GridView.builder(
         itemCount: pilgrim.imageURL.length,
         gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.all(8),
@@ -23,7 +21,7 @@ class Photos extends StatelessWidget {
                   width: .5,
                 ),
                 image: DecorationImage(
-                    image: FileImage(File(pilgrim.imageURL[index])),
+                    image: NetworkImage(pilgrim.imageURL[index]),
                     fit: BoxFit.cover)),
           );
         },

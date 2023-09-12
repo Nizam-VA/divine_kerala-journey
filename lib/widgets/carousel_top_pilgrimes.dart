@@ -1,16 +1,14 @@
-import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:devine_kerala_journey/screens/all_pilgrims/screen_user_view_all_pilgrims.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../model/pilgrimages_data.dart';
 import '../screens/pilgrim_details/screen_pilgrimes_details.dart';
 
 class CarouselTopPilgrimes extends StatefulWidget {
-  CarouselTopPilgrimes({super.key});
+  List<PilgrimagesData> pilgrims;
+  CarouselTopPilgrimes({super.key, required this.pilgrims});
 
   @override
   State<CarouselTopPilgrimes> createState() => _CarouselTopPilgrimesState();
@@ -22,11 +20,9 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
 
   @override
   Widget build(BuildContext context) {
-    final pilgrims = Provider.of<List<PilgrimagesData>>(context);
     images = [
-      pilgrims[0].imageURL[0],
-      pilgrims[1].imageURL[0],
-      pilgrims[2].imageURL[0],
+      widget.pilgrims[1].imageURL[0],
+      widget.pilgrims[0].imageURL[0],
     ];
 
     final imageSliders = images
@@ -43,13 +39,13 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.black,
                         image: DecorationImage(
-                            image: FileImage(File(item)), fit: BoxFit.cover),
+                            image: NetworkImage(item), fit: BoxFit.cover),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12, left: 12),
                       child: Text(
-                        pilgrims[_currentIndex].place,
+                        widget.pilgrims[_currentIndex].place,
                         style: const TextStyle(
                             color: AppColors.notFavorite,
                             fontSize: 16,
@@ -67,7 +63,7 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) => ScreenPilgrimesDetails(
-              pilgrim: pilgrims[_currentIndex],
+              pilgrim: widget.pilgrims[_currentIndex],
             ),
           ),
         );

@@ -1,3 +1,4 @@
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:flutter/material.dart';
 
 final inputDecoration = InputDecoration(
@@ -14,3 +15,13 @@ final inputDecoration = InputDecoration(
 );
 
 const SAVE_KEY_NAME = 'UserLoggedIn';
+
+ValueNotifier<List<PilgrimagesData>> allPilgrims =
+    ValueNotifier<List<PilgrimagesData>>([]);
+
+ValueNotifier<List<String>> allImages = ValueNotifier<List<String>>([]);
+
+getAllImages() {
+  allImages.value = allPilgrims.value.expand((x) => x.imageURL).toList();
+  print(allImages.value);
+}

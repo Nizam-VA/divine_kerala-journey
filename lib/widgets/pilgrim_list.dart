@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:devine_kerala_journey/screens/screen_admin_view_pilgrim.dart';
 import 'package:devine_kerala_journey/services/database_services.dart';
@@ -40,7 +38,7 @@ class _PilgrimListState extends State<PilgrimList> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: FileImage(File(pilgrims[index].imageURL[0])),
+                  image: NetworkImage(pilgrims[index].imageURL[0]),
                   fit: BoxFit.cover,
                 ),
               ),

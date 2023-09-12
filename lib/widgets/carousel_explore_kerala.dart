@@ -1,15 +1,13 @@
-import 'dart:io';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../model/pilgrimages_data.dart';
 import '../styles/app_colors.dart';
 
 class CarouselExploreKerala extends StatefulWidget {
-  CarouselExploreKerala({super.key});
+  List<PilgrimagesData> pilgrims;
+  CarouselExploreKerala({super.key, required this.pilgrims});
 
   @override
   State<CarouselExploreKerala> createState() => _CarouselExploreKeralaState();
@@ -20,14 +18,9 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
   List<String> images = [];
   @override
   Widget build(BuildContext context) {
-    final pilgrims = Provider.of<List<PilgrimagesData>>(context);
-    if (pilgrims.isEmpty) {
-      // Handle the case when the 'pilgrims' list is empty.
-      return const CircularProgressIndicator();
-    }
     images = [
-      pilgrims[0].imageURL[0],
-      pilgrims[1].imageURL[0],
+      widget.pilgrims[0].imageURL[0],
+      widget.pilgrims[1].imageURL[0],
     ];
     final imageSliders = images
         .map((item) => Container(
@@ -39,7 +32,7 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
                   decoration: BoxDecoration(
                     color: Colors.red,
                     image: DecorationImage(
-                        image: FileImage(File(item)), fit: BoxFit.cover),
+                        image: NetworkImage(item), fit: BoxFit.cover),
                   ),
                 ),
               ),
@@ -50,7 +43,7 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx) =>
-                ScreenPilgrimesDetails(pilgrim: pilgrims[_currentIndex]),
+                ScreenPilgrimesDetails(pilgrim: widget.pilgrims[_currentIndex]),
           ),
         );
       },

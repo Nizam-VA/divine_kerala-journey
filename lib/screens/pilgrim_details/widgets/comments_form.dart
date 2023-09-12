@@ -1,8 +1,10 @@
+import 'package:devine_kerala_journey/model/comments.dart';
+import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../services/auth_services.dart';
+import '../../../services/auth_services.dart';
 
 final AuthServices _auth = AuthServices();
 
@@ -42,10 +44,20 @@ class _CommentsFormState extends State<CommentsForm> {
                 if (_formKey.currentState!.validate()) {
                   String commentId = DateTime.now().toString();
                   String pilgrimId = widget.pilgrimId;
+                  String userId = _auth.firebaseAuth.currentUser!.uid;
                   String message = _commentController.text;
-                  String image = _auth.firebaseAuth.currentUser!.photoURL!;
                   String userName =
                       _auth.firebaseAuth.currentUser!.displayName!;
+
+                  final comment = CommentsModel(
+                      commentId: commentId,
+                      userId: userId,
+                      userName: userName,
+                      pilgrimId: pilgrimId,
+                      message: message);
+
+                  DatabaseComments().insertPilgrim(comment);
+
                   Navigator.pop(context);
                 }
               },

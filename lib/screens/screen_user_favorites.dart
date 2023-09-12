@@ -1,7 +1,8 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/database/favorites_database.dart';
-import 'package:devine_kerala_journey/model/favorites.dart';
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
+import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/pilgrim_details/widgets/favorite_icon.dart';
 import 'package:devine_kerala_journey/screens/screen_login.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/services/database_services.dart';
@@ -22,22 +23,6 @@ class _ScreenUserFavoritesState extends State<ScreenUserFavorites> {
 
   // List<String> _topPligrimes = [
   DatabaseFavorites databaseFavorites = DatabaseFavorites();
-
-  Set<Favorites> favorites = {};
-  List<String> images = [];
-
-  @override
-  void initState() {
-    _getFavorites();
-    super.initState();
-  }
-
-  Future<void> _getFavorites() async {
-    final favoritesList = await databaseFavorites.getFavorites();
-    setState(() {
-      favorites = favoritesList.toSet();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,75 +55,106 @@ class _ScreenUserFavoritesState extends State<ScreenUserFavorites> {
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: List.generate(favorites.length, (index) {
-                return InkWell(
-                  onTap: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (ctx) => ScreenPilgrimesDetails(),
-                    //   ),
-                    // );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: 12,
-                    ),
-                    height: MediaQuery.of(context).size.height / 4,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     blurRadius: 1,
-                      //     spreadRadius: -1,
-                      //   ),
-                      // ],
-                      color: Colors.black,
-                      image: DecorationImage(
-                        image:
-                            FileImage(File(favorites.elementAt(index).image)),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: 14,
-                            left: 12,
-                          ),
-                          child: Text(
-                            favorites.elementAt(index).place,
-                            style: TextStyle(
-                              color: AppColors.notFavorite,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await databaseFavorites
-                                .deleteFavorite(favorites.elementAt(index).id)
-                                .then((value) => _getFavorites());
-                          },
-                          icon: Icon(
-                            Icons.favorite,
-                            color: AppColors.favorite,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-            ),
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('pilgrims')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final favoritePilgrims = snapshot.data!.docs
+                      .map((doc) => PilgrimagesData(
+                          id: doc['id'],
+                          place: doc['place_name'],
+                          location: doc['location'],
+                          description: doc['description'],
+                          district: doc['district'],
+                          category: doc['category'],
+                          popular: doc['popular'],
+                          road: doc['road'],
+                          rail: doc['rail'],
+                          air: doc['air'],
+                          latitude: doc['latitude'],
+                          longitude: doc['longitude'],
+                          imageURL: List.from(doc['images']),
+                          linkURL: List.from(doc['links'])))
+                      .where((pilgrim) =>
+                          favoriteNotifier.value.contains(pilgrim.id))
+                      .toList();
+                  pilgrimNotifier.value = favoritePilgrims;
+                  return Expanded(
+                    child: ValueListenableBuilder(
+                        valueListenable: pilgrimNotifier,
+                        builder: (context, value, _) {
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: pilgrimNotifier.value.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                ScreenPilgrimesDetails(
+                                                    pilgrim: pilgrimNotifier
+                                                        .value[index])));
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 12,
+                                    ),
+                                    height:
+                                        MediaQuery.of(context).size.height / 4,
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.black,
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                            value[index].imageURL[0]),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 14,
+                                            left: 12,
+                                          ),
+                                          child: Text(
+                                            value[index].place,
+                                            style: const TextStyle(
+                                              color: AppColors.notFavorite,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        FavoriteIcon(
+                                          pilgrim: value[index],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        }),
+                  );
+                }),
           ),
         );
       }),
     );
+  }
+
+  refresh() {
+    setState(() {});
   }
 }

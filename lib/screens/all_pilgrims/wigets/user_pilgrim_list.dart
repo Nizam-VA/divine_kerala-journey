@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:devine_kerala_journey/model/favorites.dart';
 import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +15,6 @@ class UserPilgrimList extends StatefulWidget {
 }
 
 class _UserPilgrimListState extends State<UserPilgrimList> {
-  List<Favorites> favorites = [];
   @override
   Widget build(BuildContext context) {
     final pilgrims = Provider.of<List<PilgrimagesData>>(context);

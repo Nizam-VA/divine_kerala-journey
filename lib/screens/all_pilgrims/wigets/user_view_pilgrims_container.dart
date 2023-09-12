@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
@@ -50,19 +48,22 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
           child: Column(
             children: [
               SizedBox(height: 12),
-              TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    query = value;
-                  });
-                },
-                decoration: InputDecoration(
-                    hintText: 'Search pilgrims here...',
-                    suffixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(60),
-                        borderSide: const BorderSide(
-                            color: AppColors.primary, width: .5))),
+              SizedBox(
+                height: 45,
+                child: TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      query = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      hintText: 'Search pilgrims here...',
+                      suffixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(60),
+                          borderSide: const BorderSide(
+                              color: AppColors.primary, width: .5))),
+                ),
               ),
               Container(
                 padding:
@@ -77,17 +78,20 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
                 child: Column(
                   children: [
                     const SizedBox(height: 12),
-                    DropdownButtonFormField(
-                      decoration: inputDecoration.copyWith(
-                          label: const Text('District')),
-                      value: districts[0],
-                      items: districts.map((dist) {
-                        return DropdownMenuItem(
-                          child: Text('$dist'),
-                          value: dist,
-                        );
-                      }).toList(),
-                      onChanged: ((value) => setState(() => district = value!)),
+                    SizedBox(
+                      height: 45,
+                      child: DropdownButtonFormField(
+                        decoration: inputDecoration.copyWith(
+                            labelText: 'Select district'),
+                        items: districts.map((dist) {
+                          return DropdownMenuItem(
+                            child: Text('$dist'),
+                            value: dist,
+                          );
+                        }).toList(),
+                        onChanged: ((value) =>
+                            setState(() => district = value!)),
+                      ),
                     ),
                   ],
                 ),
@@ -123,14 +127,21 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
                               .toLowerCase()
                               .contains(query.toLowerCase()))
                           .toList();
+                      var filterDistrict;
+                      if (district == '') {
+                        filterDistrict = searchPilgrims;
+                      } else {
+                        filterDistrict = searchPilgrims
+                            .where((pilgrim) => pilgrim.district == district);
+                      }
 
-                      if (searchPilgrims.isEmpty) {
+                      if (filterDistrict.isEmpty) {
                         return const Center(
                           child: Text('There is no data'),
                         );
                       } else {
                         return ListView.builder(
-                          itemCount: searchPilgrims.length,
+                          itemCount: filterDistrict.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -148,8 +159,8 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     image: DecorationImage(
-                                        image: FileImage(File(
-                                            searchPilgrims[index].imageURL[0])),
+                                        image: NetworkImage(
+                                            searchPilgrims[index].imageURL[0]),
                                         fit: BoxFit.cover),
                                   ),
                                   child: Padding(

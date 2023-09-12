@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../model/comments.dart';
 import '../model/user.dart';
@@ -44,6 +47,28 @@ class DatabasePilgrim {
   final CollectionReference pilgrimCollection =
       FirebaseFirestore.instance.collection('pilgrims');
 
+  //image storage on firestorage
+
+  Future<List<String>> uploadImages(
+      List<String> imageList, String placeName) async {
+    List<String> imageString = [];
+    for (var img in imageList) {
+      File imageFile = File(img);
+      String imageName = imageFile.path.split('/').last.toString();
+      Reference toRoot = FirebaseStorage.instance.ref();
+      Reference toDirectory = toRoot.child('Pilgrim Images');
+      Reference toImage = toDirectory.child('$placeName/$imageName');
+      try {
+        await toImage.putFile(imageFile);
+        final url = await toImage.getDownloadURL();
+        imageString.add(url);
+      } catch (e) {
+        e;
+      }
+    }
+    return imageString;
+  }
+
   //insert data
   Future insertPilgrim(PilgrimagesData pilgrimagesData) async {
     Map<String, dynamic> pilgrims = {
@@ -59,7 +84,8 @@ class DatabasePilgrim {
       'air': pilgrimagesData.air,
       'latitude': pilgrimagesData.latitude,
       'longitude': pilgrimagesData.longitude,
-      'images': pilgrimagesData.imageURL,
+      'images':
+          await uploadImages(pilgrimagesData.imageURL, pilgrimagesData.place),
       'links': pilgrimagesData.linkURL,
     };
     return await pilgrimCollection.doc(id).set(pilgrims).whenComplete(() {
@@ -75,7 +101,7 @@ class DatabasePilgrim {
   }
 
   //pilgrim list from snapshot
-  List<PilgrimagesData> _pilgrimListFromSnapshot(QuerySnapshot snapshot) {
+  List<PilgrimagesData> pilgrimListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       final String place = doc['place_name'];
       final String location = doc['location'];
@@ -110,7 +136,7 @@ class DatabasePilgrim {
   }
 
   Stream<List<PilgrimagesData>> get pilgrims {
-    return pilgrimCollection.snapshots().map((_pilgrimListFromSnapshot));
+    return pilgrimCollection.snapshots().map((pilgrimListFromSnapshot));
   }
 
   //pilgrim from firebase
@@ -172,7 +198,7 @@ class DatabaseComments {
   final String? id;
   DatabaseComments({this.id});
   final CollectionReference pilgrimCollection =
-      FirebaseFirestore.instance.collection('comments');
+      FirebaseFirestore.instance.collection('pilgrims');
 
   Future insertPilgrim(CommentsModel comments) async {
     Map<String, dynamic> comment = {
@@ -181,12 +207,19 @@ class DatabaseComments {
       'userName': comments.userName,
       'pilgrimId': comments.pilgrimId,
       'message': comments.message,
-      'image': comments.image,
     };
-    return await pilgrimCollection.doc(id).set(comment).whenComplete(() {
-      print('$id is created');
+    return await pilgrimCollection
+        .doc(comments.pilgrimId)
+        .collection('comments')
+        .add(comment)
+        .whenComplete(() {
+      print('${comments.userName} is created');
     });
   }
+
+  // Future<CommentsModel> getMessage(String commentId) async{
+
+  // }
 }
 
   

@@ -1,5 +1,10 @@
-import 'package:devine_kerala_journey/model/favorites.dart';
+import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
+
+ValueNotifier<List<String>> favoriteNotifier = ValueNotifier<List<String>>([]);
+ValueNotifier<List<PilgrimagesData>> pilgrimNotifier =
+    ValueNotifier<List<PilgrimagesData>>([]);
 
 class DatabaseFavorites {
   static const _dbVersion = 1;
@@ -7,6 +12,7 @@ class DatabaseFavorites {
   static const table = 'favorites';
 
   static const columnId = '_id';
+  static const columnPlaceId = 'placeId';
   static const columnPlace = 'place';
   static const columnImage = 'image';
 
@@ -26,37 +32,44 @@ class DatabaseFavorites {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''CREATE TABLE $table (
   $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-  $columnPlace TEXT NOT NULL,
-  $columnImage TEXT NOT NULL)
+  $columnPlaceId TEXT NOT NULL)
 ''');
   }
 
-  Future<int> insertFavorites(Favorites favorite) async {
+  insertFavorites(PilgrimagesData pilgrim) async {
     final db = await database;
-    return await db.insert(
+    await db.insert(
       table,
-      {columnPlace: favorite.place, columnImage: favorite.image},
+      {
+        columnPlaceId: pilgrim.id,
+      },
     );
+    favoriteNotifier.value.add(pilgrim.id);
+    pilgrimNotifier.value.add(pilgrim);
+    pilgrimNotifier.notifyListeners();
+    favoriteNotifier.notifyListeners();
   }
 
-  Future<List<Favorites>> getFavorites() async {
+  isFavorite() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(table);
-    return List.generate(
-      maps.length,
-      (index) => Favorites(
-          id: maps[index][columnId],
-          place: maps[index][columnPlace],
-          image: maps[index][columnImage]),
+    final List<Map<String, dynamic>> result = await db.rawQuery(
+      'SELECT * FROM $table',
     );
+    for (var map in result) {
+      favoriteNotifier.value.add(map[columnPlaceId] as String);
+    }
   }
 
-  Future<int> deleteFavorite(int id) async {
+  deleteFavorite(String id) async {
     final db = await database;
-    return await db.delete(
+    await db.delete(
       table,
-      where: '$columnId = ?',
+      where: '$columnPlaceId = ?',
       whereArgs: [id],
     );
+    favoriteNotifier.value.removeWhere((element) => element == id);
+    pilgrimNotifier.value.removeWhere((element) => element.id == id);
+    pilgrimNotifier.notifyListeners();
+    favoriteNotifier.notifyListeners();
   }
 }

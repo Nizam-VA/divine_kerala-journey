@@ -1,3 +1,4 @@
+import 'package:devine_kerala_journey/database/favorites_database.dart';
 import 'package:devine_kerala_journey/screens/screen_user_image_gallery.dart';
 import 'package:devine_kerala_journey/screens/screensplash.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
@@ -10,6 +11,7 @@ var pilgrime;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await DatabaseFavorites().isFavorite();
   runApp(const MyApp());
 }
 
