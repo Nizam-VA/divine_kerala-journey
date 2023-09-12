@@ -5,6 +5,8 @@ import 'package:devine_kerala_journey/screens/screen_user_image_gallery.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
+int currentSelectedIndex = 0;
+
 class ScreenUser extends StatefulWidget {
   const ScreenUser({super.key});
 
@@ -13,7 +15,6 @@ class ScreenUser extends StatefulWidget {
 }
 
 class _ScreenUserState extends State<ScreenUser> {
-  int _currentSelectedIndex = 0;
   final _screens = [
     ScreenUserHome(),
     ScreenUserCreateStory(),
@@ -23,12 +24,12 @@ class _ScreenUserState extends State<ScreenUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentSelectedIndex],
+      body: _screens[currentSelectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentSelectedIndex,
+        currentIndex: currentSelectedIndex,
         onTap: (newIndex) {
           setState(() {
-            _currentSelectedIndex = newIndex;
+            currentSelectedIndex = newIndex;
           });
         },
         type: BottomNavigationBarType.fixed,

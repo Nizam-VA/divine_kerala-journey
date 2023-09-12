@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
+import 'package:devine_kerala_journey/screens/screen_user.dart';
 import 'package:devine_kerala_journey/screens/screen_user_update_story.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,9 @@ class _ScreenUserStoryDetailsState extends State<ScreenUserStoryDetails> {
                               );
                             }
                           });
-                          Navigator.pop(ctx);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (ctx) => ScreenUser()),
+                              (route) => false);
                         },
                       ),
                     ],

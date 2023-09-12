@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/pilgrimages_data.dart';

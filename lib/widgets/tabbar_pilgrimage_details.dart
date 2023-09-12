@@ -1,5 +1,5 @@
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/widgets/near_by.dart';
+import 'package:devine_kerala_journey/widgets/comments.dart';
 import 'package:devine_kerala_journey/widgets/photos.dart';
 import 'package:devine_kerala_journey/widgets/videos.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +43,7 @@ class _TabBarPilgrimageDetailsState extends State<TabBarPilgrimageDetails> {
                   About(pilgrim: widget.pilgrim),
                   Photos(pilgrim: widget.pilgrim),
                   Videos(pilgrim: widget.pilgrim),
-                  NearBy(),
+                  Comments(),
                 ],
               ),
             ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
 import 'package:devine_kerala_journey/model/user_story.dart';
+import 'package:devine_kerala_journey/screens/screen_user.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -233,6 +234,11 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                                   ),
                                 );
                               }
+                              currentSelectedIndex = 0;
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (ctx) => ScreenUser()),
+                                  (route) => false);
                             });
                           }
                         },

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:devine_kerala_journey/screens/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
     final pilgrims = Provider.of<List<PilgrimagesData>>(context);
     if (pilgrims.isEmpty) {
       // Handle the case when the 'pilgrims' list is empty.
-      return Center(child: Text("No data available"));
+      return const CircularProgressIndicator();
     }
     images = [
       pilgrims[0].imageURL[0],

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../model/pilgrimages_data.dart';
-import '../screens/screen_pilgrimes_details.dart';
+import '../screens/pilgrim_details/screen_pilgrimes_details.dart';
 
 class CarouselTopPilgrimes extends StatefulWidget {
   CarouselTopPilgrimes({super.key});
@@ -26,6 +26,7 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
     images = [
       pilgrims[0].imageURL[0],
       pilgrims[1].imageURL[0],
+      pilgrims[2].imageURL[0],
     ];
 
     final imageSliders = images

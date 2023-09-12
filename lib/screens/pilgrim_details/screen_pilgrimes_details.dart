@@ -4,6 +4,7 @@ import 'package:devine_kerala_journey/database/favorites_database.dart';
 import 'package:devine_kerala_journey/model/favorites.dart';
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
+import 'package:devine_kerala_journey/widgets/comments_form.dart';
 import 'package:devine_kerala_journey/widgets/tabbar_pilgrimage_details.dart';
 import 'package:flutter/material.dart';
 
@@ -71,10 +72,11 @@ class _ScreenPilgrimesDetailsState extends State<ScreenPilgrimesDetails> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: () {},
-        child: const Icon(Icons.comment),
-      ),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.comment),
+          onPressed: () {
+            _showCommentsPanel();
+          }),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -119,5 +121,20 @@ class _ScreenPilgrimesDetailsState extends State<ScreenPilgrimesDetails> {
         ),
       ),
     );
+  }
+
+  void _showCommentsPanel() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) {
+          return SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height / 2,
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+              child: CommentsForm(pilgrimId: widget.pilgrim.id),
+            ),
+          );
+        });
   }
 }

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
 
+import '../model/comments.dart';
+import '../model/user.dart';
+
 class DatabaseUser {
   insertUser(String uid, String name, String email) {
     DocumentReference documentReference =
@@ -13,6 +16,24 @@ class DatabaseUser {
     documentReference.set(users).whenComplete(() {
       print("$name created");
     });
+
+    Future<UserModel?> getUser(String uid) async {
+      DocumentSnapshot documentSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        UserModel user = UserModel(
+          uid: uid,
+          name: data['name'] as String?,
+          email: data['email'] as String?,
+        );
+        return user;
+      } else {
+        return null; // User not found
+      }
+    }
   }
 }
 
@@ -147,8 +168,26 @@ class DatabasePilgrim {
   }
 }
 
+class DatabaseComments {
+  final String? id;
+  DatabaseComments({this.id});
+  final CollectionReference pilgrimCollection =
+      FirebaseFirestore.instance.collection('comments');
 
-
+  Future insertPilgrim(CommentsModel comments) async {
+    Map<String, dynamic> comment = {
+      'commentId': comments.commentId,
+      'userId': comments.userId,
+      'userName': comments.userName,
+      'pilgrimId': comments.pilgrimId,
+      'message': comments.message,
+      'image': comments.image,
+    };
+    return await pilgrimCollection.doc(id).set(comment).whenComplete(() {
+      print('$id is created');
+    });
+  }
+}
 
   
 
