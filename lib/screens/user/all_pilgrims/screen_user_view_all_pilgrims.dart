@@ -1,11 +1,10 @@
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/screens/all_pilgrims/wigets/user_view_pilgrims_container.dart';
-import 'package:devine_kerala_journey/screens/filter/screen_fllter_pilgrims.dart';
+import 'package:devine_kerala_journey/screens/user/all_pilgrims/wigets/user_view_pilgrims_container.dart';
 import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../styles/app_colors.dart';
+import '../../../styles/app_colors.dart';
 
 class ScreenUserViewAllPilgrims extends StatelessWidget {
   const ScreenUserViewAllPilgrims({super.key});
@@ -21,15 +20,6 @@ class ScreenUserViewAllPilgrims extends StatelessWidget {
           iconTheme: const IconThemeData(color: Colors.white),
           title: const Text('Pilgrims', style: TextStyle(color: Colors.white)),
           centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (ctx) => ScreenFilter()));
-              },
-              icon: const Icon(Icons.next_plan_outlined),
-            )
-          ],
         ),
         body: UserViewAllContainer(),
       ),

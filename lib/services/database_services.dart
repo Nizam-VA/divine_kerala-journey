@@ -95,9 +95,25 @@ class DatabasePilgrim {
 
   //delete data
   Future deletePilgrim(String id) async {
-    return await pilgrimCollection.doc(id).delete().whenComplete(() {
+    //step 1: fetch all the list of image urls associated with pilgrim
+    DocumentSnapshot pilgrimSnapshot = await pilgrimCollection.doc(id).get();
+    List<String> imageUrls = List<String>.from(pilgrimSnapshot.get('images'));
+
+    //step 2: Delete the document from the 'pilgrims' collction
+    await pilgrimCollection.doc(id).delete().whenComplete(() {
       print('$id is deleted');
     });
+
+    //step 3: Delete the images from firebase storage using urls
+
+    for (String imageUrl in imageUrls) {
+      try {
+        Reference ref = FirebaseStorage.instance.refFromURL(imageUrl);
+        await ref.delete();
+      } catch (e) {
+        print('$e error detected');
+      }
+    }
   }
 
   //pilgrim list from snapshot
@@ -197,31 +213,75 @@ class DatabasePilgrim {
 class DatabaseComments {
   final String? id;
   DatabaseComments({this.id});
-  final CollectionReference pilgrimCollection =
-      FirebaseFirestore.instance.collection('pilgrims');
 
-  Future insertPilgrim(CommentsModel comments) async {
+  Future insertComment(CommentsModel comments) async {
+    final commentDoc = FirebaseFirestore.instance
+        .collection('pilgrims')
+        .doc(comments.pilgrimId)
+        .collection('comments')
+        .doc();
     Map<String, dynamic> comment = {
-      'commentId': comments.commentId,
+      'commentId': commentDoc.id,
       'userId': comments.userId,
       'userName': comments.userName,
       'pilgrimId': comments.pilgrimId,
       'message': comments.message,
     };
-    return await pilgrimCollection
-        .doc(comments.pilgrimId)
-        .collection('comments')
-        .add(comment)
-        .whenComplete(() {
-      print('${comments.userName} is created');
+    await commentDoc.set(comment).whenComplete(() {
+      print('$id created');
     });
   }
 
-  // Future<CommentsModel> getMessage(String commentId) async{
+  Future<CommentsModel?> getMessage(String commentId, String pilgrimId) async {
+    try {
+      final commentDoc = await FirebaseFirestore.instance
+          .collection('pilgrims')
+          .doc(pilgrimId)
+          .collection('comments')
+          .doc(commentId)
+          .get();
+      if (commentDoc.exists) {
+        return CommentsModel(
+          commentId: commentDoc['commentId'],
+          userId: commentDoc['userId'],
+          userName: commentDoc['userName'],
+          pilgrimId: commentDoc['pilgrimId'],
+          message: commentDoc['message'],
+        );
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('error fetchin comment $e');
+      return null;
+    }
+  }
 
-  // }
+  Future<List<CommentsModel>?> getCommentsForPilgrim(String pilgrimId) async {
+    try {
+      final commentsQuery = await FirebaseFirestore.instance
+          .collection('pilgrims')
+          .doc(pilgrimId)
+          .collection('comments')
+          .get();
+
+      final commentsList = commentsQuery.docs.map((commentDoc) {
+        return CommentsModel(
+          commentId: commentDoc['commentId'],
+          userId: commentDoc['userId'],
+          userName: commentDoc['userName'],
+          pilgrimId: commentDoc['pilgrimId'],
+          message: commentDoc['message'],
+        );
+      }).toList();
+
+      return commentsList.isEmpty ? null : commentsList;
+    } catch (e) {
+      print('Error fetching comments: $e');
+      return null; // Handle error appropriately in your code.
+    }
+  }
 }
-
   
 
 

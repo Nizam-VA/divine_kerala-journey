@@ -48,15 +48,9 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        leading: Image.asset(
-          'assets/icons/divine-kerala-journey-logo.webp',
-          color: Colors.white,
-        ),
         title: const Text(
           'Create Story',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),

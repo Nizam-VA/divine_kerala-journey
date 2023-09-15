@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../styles/app_colors.dart';
+import '../../../../styles/app_colors.dart';
 
 class SearchText extends StatelessWidget {
   const SearchText({super.key});

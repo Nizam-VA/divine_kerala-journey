@@ -33,10 +33,12 @@ class _ScreenViewMapState extends State<ScreenViewMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
-          mapType: MapType.normal,
+          mapType: MapType.satellite,
           markers: _markers.values.toSet(),
           onMapCreated: (controller) {
-            addMarker('place', current);
+            setState(() {
+              addMarker('place', current);
+            });
             _mapController = controller;
           },
           initialCameraPosition: CameraPosition(

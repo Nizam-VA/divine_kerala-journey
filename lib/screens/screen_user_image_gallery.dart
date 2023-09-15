@@ -1,5 +1,6 @@
 import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
+import 'package:devine_kerala_journey/widgets/image_dialogue.dart';
 import 'package:flutter/material.dart';
 
 class ScreenUserImageGallery extends StatelessWidget {
@@ -13,11 +14,7 @@ class ScreenUserImageGallery extends StatelessWidget {
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
-        leading: Image.asset(
-          'assets/icons/divine-kerala-journey-logo.webp',
-          color: Colors.white,
-        ),
-        title: Text(
+        title: const Text(
           'Image Gallery',
           style: TextStyle(
             color: Colors.white,
@@ -31,19 +28,30 @@ class ScreenUserImageGallery extends StatelessWidget {
             builder: (context, images, _) {
               return GridView.builder(
                 itemCount: images.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4),
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          width: .5,
+                  return InkWell(
+                    onTap: () async {
+                      Future.delayed(const Duration(seconds: 1));
+                      await showDialog(
+                        context: context,
+                        builder: (_) => ImageDialog(
+                          image: NetworkImage(images[index]),
                         ),
-                        image: DecorationImage(
-                            image: NetworkImage(images[index]),
-                            fit: BoxFit.cover)),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            width: .5,
+                          ),
+                          image: DecorationImage(
+                              image: NetworkImage(images[index]),
+                              fit: BoxFit.cover)),
+                    ),
                   );
                 },
               );

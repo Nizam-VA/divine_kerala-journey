@@ -1,10 +1,10 @@
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/screens/screen_admin_view_pilgrim.dart';
+import 'package:devine_kerala_journey/screens/admin/view_pilgrims/screen_admin_view_pilgrim.dart';
 import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../styles/app_colors.dart';
+import '../../../../styles/app_colors.dart';
 
 class PilgrimList extends StatefulWidget {
   const PilgrimList({super.key});
@@ -47,17 +47,10 @@ class _PilgrimListState extends State<PilgrimList> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 14,
-                      left: 12,
-                    ),
-                    child: Text(
-                      pilgrims[index].place,
-                      style: const TextStyle(
-                        color: AppColors.notFavorite,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    padding: const EdgeInsets.only(top: 14, left: 12),
+                    child: Text(pilgrims[index].place,
+                        style: const TextStyle(color: AppColors.notFavorite),
+                        textAlign: TextAlign.center),
                   ),
                   PopupMenuButton(
                     onSelected: (value) async {

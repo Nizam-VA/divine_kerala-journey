@@ -88,9 +88,6 @@ class _CarouselUserStoriesState extends State<CarouselUserStories> {
                   });
                 }),
           ),
-          SizedBox(
-            height: 8,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -113,9 +110,7 @@ class _CarouselUserStoriesState extends State<CarouselUserStories> {
                   },
                 ).toList(),
               ),
-              SizedBox(
-                width: 30,
-              ),
+              const SizedBox(width: 30),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(

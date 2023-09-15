@@ -1,5 +1,5 @@
-import 'package:devine_kerala_journey/screens/screen_login.dart';
 import 'package:devine_kerala_journey/screens/screen_user.dart';
+import 'package:devine_kerala_journey/screens/user/login/screen_login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

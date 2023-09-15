@@ -21,21 +21,14 @@ class _TabBarPilgrimageDetailsState extends State<TabBarPilgrimageDetails> {
     return DefaultTabController(
       length: 4,
       child: Container(
+        height: MediaQuery.of(context).size.height * 0.69,
         child: Column(
           children: [
-            TabBar(tabs: [
-              Tab(
-                text: 'About',
-              ),
-              Tab(
-                text: 'Photos',
-              ),
-              Tab(
-                text: 'Videos',
-              ),
-              Tab(
-                text: 'Comments',
-              )
+            const TabBar(tabs: [
+              Tab(text: 'About'),
+              Tab(text: 'Photos'),
+              Tab(text: 'Videos'),
+              Tab(text: 'Comments')
             ]),
             Expanded(
               child: TabBarView(
@@ -43,7 +36,7 @@ class _TabBarPilgrimageDetailsState extends State<TabBarPilgrimageDetails> {
                   About(pilgrim: widget.pilgrim),
                   Photos(pilgrim: widget.pilgrim),
                   Videos(pilgrim: widget.pilgrim),
-                  Comments(),
+                  Comments(pilgrim: widget.pilgrim),
                 ],
               ),
             ),

@@ -1,100 +1,48 @@
 import 'dart:io';
 
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/screens/screen_admin_home.dart';
+import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../services/database_services.dart';
-
-class ScreenAdminUpdate extends StatefulWidget {
-  PilgrimagesData pilgrim;
-  ScreenAdminUpdate({super.key, required this.pilgrim});
+class ScreenAdminInsertData extends StatefulWidget {
+  const ScreenAdminInsertData({super.key});
 
   @override
-  State<ScreenAdminUpdate> createState() => _ScreenAdminUpdateState();
+  State<ScreenAdminInsertData> createState() => _ScreenAdminInsertDataState();
 }
 
-class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
-  List<String> districts = [
-    'Alappuzha',
-    'Eranakulam',
-    'Thrissur',
-    'Malappuram',
-    'Kozhikkode',
-    'Kasaragode',
-    'Kannur',
-    'Wayanad',
-    'Palakkad',
-    'Kollam',
-    'Idukki',
-    'Pathanamthitta',
-    'Trivandrum'
-  ];
-  List<String> categories = [
-    'Masjid',
-    'Temple',
-    'Church',
-    'Synagogue',
-    'Historical place',
-    'Others'
-  ];
-
+class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
+  int countImage = 0;
+  int countLink = 0;
   final _formKey = GlobalKey<FormState>();
-  String? id;
-  final _placeController = TextEditingController();
-  final _locationController = TextEditingController();
-  final _descriptionController = TextEditingController();
+
+  String id = DateTime.now().toString();
+  String? place;
+  String? location;
+  String? description;
   String? district;
   String? category;
-  bool? popular;
-  final _railController = TextEditingController();
-  final _roadController = TextEditingController();
-  final _airController = TextEditingController();
-  final _latController = TextEditingController();
-  final _longController = TextEditingController();
+  bool popular = false;
+  String? rail;
+  String? road;
+  String? air;
+  String? latitude;
+  String? longitude;
   List<String> images = [];
   String link = '';
   List<String> links = [];
-
-  int countImage = 0;
-  int countLink = 0;
-
-  @override
-  void initState() {
-    id = widget.pilgrim.id;
-    popular = widget.pilgrim.popular;
-    district = widget.pilgrim.district;
-    category = widget.pilgrim.category;
-    images = widget.pilgrim.imageURL;
-    links = widget.pilgrim.linkURL;
-    _placeController.text = widget.pilgrim.place;
-    _locationController.text = widget.pilgrim.location;
-    _descriptionController.text = widget.pilgrim.description;
-    _railController.text = widget.pilgrim.rail;
-    _roadController.text = widget.pilgrim.road;
-    _airController.text = widget.pilgrim.air;
-    _latController.text = widget.pilgrim.latitude;
-    _longController.text = widget.pilgrim.longitude;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-        title: Text(
-          'Edit Pilgrime',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title:
+            const Text('Add Pilgrims', style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -105,7 +53,6 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: _placeController,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Enter the place name:';
@@ -113,18 +60,27 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                       return null;
                     }
                   },
+                  onChanged: (value) {
+                    setState(() {
+                      place = value;
+                    });
+                  },
                   decoration: const InputDecoration(
                     hintText: 'Place name: ',
                   ),
                 ),
                 TextFormField(
-                  controller: _locationController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the location name:';
+                      return 'Enter the location:';
                     } else {
                       return null;
                     }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      location = value;
+                    });
                   },
                   decoration: const InputDecoration(
                     hintText: 'Location: ',
@@ -141,13 +97,17 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 TextFormField(
-                  controller: _descriptionController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the place description:';
+                      return 'Enter the description about the place:';
                     } else {
                       return null;
                     }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      description = value;
+                    });
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -160,20 +120,22 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                 ),
                 DropdownButtonFormField(
                   decoration: inputDecoration.copyWith(label: Text('District')),
-                  value: district,
+                  value: districts[0],
                   items: districts.map((dist) {
                     return DropdownMenuItem(
+                      child: Text('$dist'),
                       value: dist,
-                      child: Text(dist),
                     );
                   }).toList(),
                   onChanged: ((value) => setState(() => district = value!)),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(
+                  height: 12,
+                ),
                 DropdownButtonFormField(
                   decoration:
                       inputDecoration.copyWith(label: const Text('Category')),
-                  value: category,
+                  value: categories[0],
                   items: categories.map((cat) {
                     return DropdownMenuItem(
                       child: Text('$cat'),
@@ -184,12 +146,12 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                 ),
                 CheckboxListTile(
                   value: popular,
-                  onChanged: (bool? value) {
+                  onChanged: (value) {
                     setState(() {
                       popular = value!;
                     });
                   },
-                  title: const Text('Popular'),
+                  title: Text('Popular'),
                 ),
                 const SizedBox(
                   width: double.infinity,
@@ -199,13 +161,17 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 TextFormField(
-                  controller: _railController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the rail distance:';
+                      return 'Enter the rail details:';
                     } else {
                       return null;
                     }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      rail = value;
+                    });
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -224,13 +190,17 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 TextFormField(
-                  controller: _roadController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the road distance:';
+                      return 'Enter the road details:';
                     } else {
                       return null;
                     }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      road = value;
+                    });
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -249,13 +219,17 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 TextFormField(
-                  controller: _airController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the air distance:';
+                      return 'Enter the air details:';
                     } else {
                       return null;
                     }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      air = value;
+                    });
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -264,42 +238,47 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 TextFormField(
-                  controller: _latController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the latitude:';
+                      return 'Enter the latitude of the place:';
                     } else {
                       return null;
                     }
+                  },
+                  onChanged: (value) {
+                    setState(() {
+                      latitude = value;
+                    });
                   },
                   decoration: const InputDecoration(
                     hintText: 'Latitude:  ',
                   ),
                 ),
                 TextFormField(
-                  controller: _longController,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the longitude:';
+                      return 'Enter the longitude of the the place:';
                     } else {
                       return null;
                     }
                   },
-                  decoration: InputDecoration(
-                    hintText: 'Longitude: ',
-                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      longitude = value;
+                    });
+                  },
+                  decoration: const InputDecoration(hintText: 'Longitude: '),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 Column(
-                    children: List.generate(images.length, (index) {
-                  return Row(
-                    children: [
-                      Visibility(
-                        visible: true,
-                        child: Container(
-                          margin: EdgeInsets.all(8),
+                    children: List.generate(countImage, (index) {
+                  return Visibility(
+                    visible: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(8),
                           width: MediaQuery.of(context).size.width / 1.4,
                           height: MediaQuery.of(context).size.height / 6,
                           decoration: BoxDecoration(
@@ -307,38 +286,31 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                             border: Border.all(),
                             image: DecorationImage(
                                 image: index < images.length
-                                    ? FileImage(
-                                        File(images[index]),
-                                      )
-                                    : FileImage(
-                                        File(''),
-                                      ),
+                                    ? FileImage(File(images[index]))
+                                    : FileImage(File('')),
                                 fit: BoxFit.cover),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            images.removeAt(index);
-                            countImage--;
-                            print(images);
-                          });
-                        },
-                        icon: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Colors.red,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 12,
-                            child: Icon(
-                              Icons.remove,
-                              color: Colors.red,
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              images.removeAt(index);
+                              countImage--;
+                              print(images);
+                            });
+                          },
+                          icon: const CircleAvatar(
+                            radius: 14,
+                            backgroundColor: Colors.red,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 12,
+                              child: Icon(Icons.remove, color: Colors.red),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 })),
                 const SizedBox(
@@ -360,7 +332,7 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                   ),
                 ),
                 Column(
-                    children: List.generate(links.length, (index) {
+                    children: List.generate(countLink, (index) {
                   return Visibility(
                     visible: true,
                     child: Row(
@@ -370,7 +342,6 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                           width: MediaQuery.of(context).size.width / 1.4,
                           child: Form(
                             child: TextFormField(
-                              initialValue: links[index],
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter the youtube link';
@@ -395,7 +366,7 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                               print(links);
                             });
                           },
-                          icon: CircleAvatar(
+                          icon: const CircleAvatar(
                             radius: 14,
                             backgroundColor: Colors.red,
                             child: CircleAvatar(
@@ -422,7 +393,7 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                     });
                     print(links);
                   },
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   label: const Text(
                     'Add YouTube Link',
                   ),
@@ -433,34 +404,31 @@ class _ScreenAdminUpdateState extends State<ScreenAdminUpdate> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         final pilgrim = PilgrimagesData(
-                          id: widget.pilgrim.id,
-                          place: _placeController.text,
-                          location: _locationController.text,
-                          description: _descriptionController.text,
+                          id: id,
+                          place: place!,
+                          location: location!,
+                          description: description!,
                           district: district!,
                           category: category!,
-                          popular: popular!,
-                          road: _roadController.text,
-                          rail: _railController.text,
-                          air: _airController.text,
-                          latitude: _latController.text,
-                          longitude: _longController.text,
+                          popular: popular,
+                          road: road!,
+                          rail: rail!,
+                          air: air!,
+                          latitude: latitude!,
+                          longitude: longitude!,
                           imageURL: images,
                           linkURL: links,
                         );
                         print(pilgrim.air);
                         await DatabasePilgrim(id: id).insertPilgrim(pilgrim);
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (ctx) => ScreenAdminHome()),
-                            (route) => false);
+                        Navigator.pop(context);
                       }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('Update'),
+                    child: Text('Save'),
                   ),
                 ),
               ],

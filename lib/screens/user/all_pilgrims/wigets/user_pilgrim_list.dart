@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../model/pilgrimages_data.dart';
-import '../../../styles/app_colors.dart';
+import '../../../../model/pilgrimages_data.dart';
+import '../../../../styles/app_colors.dart';
 
 class UserPilgrimList extends StatefulWidget {
   const UserPilgrimList({super.key});

@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/screen_pilgrimes_details.dart';
 import 'package:flutter/material.dart';
 
 import '../model/pilgrimages_data.dart';
@@ -15,25 +15,69 @@ class CarouselExploreKerala extends StatefulWidget {
 
 class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
   int _currentIndex = 0;
-  List<String> images = [];
+  List<String?> images = [];
   @override
   Widget build(BuildContext context) {
-    images = [
-      widget.pilgrims[0].imageURL[0],
-      widget.pilgrims[1].imageURL[0],
-    ];
+    images = widget.pilgrims.map((pilgrim) {
+      if (pilgrim.category == 'Others') {
+        return pilgrim.imageURL[0];
+      }
+    }).toList();
+    List<int?> indices = widget.pilgrims.map((pilgrim) {
+      if (pilgrim.category == 'Others') {
+        return widget.pilgrims.indexOf(pilgrim);
+      }
+    }).toList();
+    print(indices);
+    images = images.where((element) {
+      return element != null;
+    }).toList();
+    indices = indices.where((element) {
+      return element != null;
+    }).toList();
+    print(indices);
     final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
               color: Colors.grey[300],
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    image: DecorationImage(
-                        image: NetworkImage(item), fit: BoxFit.cover),
-                  ),
+                child: Stack(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: Image.network(
+                        item!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            // Image is fully loaded
+                            return child;
+                          } else {
+                            // Display a loading indicator while the image is loading
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12, left: 12),
+                      child: Text(
+                        widget.pilgrims[_currentIndex].place,
+                        style: const TextStyle(
+                            color: AppColors.notFavorite,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ))
@@ -58,13 +102,11 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
                 aspectRatio: 2.0,
                 onPageChanged: (index, reason) {
                   setState(() {
-                    _currentIndex = index;
+                    _currentIndex = indices[index]!;
                   });
                 }),
           ),
-          SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: images.map(
@@ -73,7 +115,7 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
                 return Container(
                   width: 10,
                   height: 10,
-                  margin: EdgeInsets.symmetric(horizontal: 2),
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: _currentIndex == index

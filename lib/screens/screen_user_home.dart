@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
 import 'package:devine_kerala_journey/model/user_story.dart';
 import 'package:devine_kerala_journey/screens/screen_about.dart';
-import 'package:devine_kerala_journey/screens/screen_login.dart';
+import 'package:devine_kerala_journey/screens/user/login/screen_login.dart';
 import 'package:devine_kerala_journey/screens/screen_settings.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';
@@ -77,31 +77,15 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: AppColors.primary,
-              iconTheme: IconThemeData(
+              iconTheme: const IconThemeData(
                 color: Colors.white,
               ),
               centerTitle: true,
-              // leading: IconButton(
-              //   onPressed: () {
-              //     Scaffold.of(context).openDrawer();
-              //   },
-              //   tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              //   icon: Image.asset(
-              //     'assets/icons/menu.png',
-              //     height: 24,
-              //   ),
-              // ),
               title: Image.asset(
                 'assets/icons/divine-kerala-journey-logo.webp',
                 color: Colors.white,
                 height: 24,
               ),
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.search),
-                ),
-              ],
             ),
             drawer: openDrawer(context),
             body: SingleChildScrollView(
@@ -160,7 +144,7 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                         horizontal: 8,
                       ),
                       child: Text(
-                        'Kerala Stories',
+                        'Your Stories',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -176,7 +160,7 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                     userStories: userStories,
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 60,
                   )
                 ],
               ),

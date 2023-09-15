@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:devine_kerala_journey/screens/all_pilgrims/screen_user_view_all_pilgrims.dart';
+import 'package:devine_kerala_journey/screens/user/all_pilgrims/screen_user_view_all_pilgrims.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../model/pilgrimages_data.dart';
-import '../screens/pilgrim_details/screen_pilgrimes_details.dart';
+import '../screens/user/pilgrim_details/screen_pilgrimes_details.dart';
 
 class CarouselTopPilgrimes extends StatefulWidget {
   List<PilgrimagesData> pilgrims;
@@ -16,15 +16,22 @@ class CarouselTopPilgrimes extends StatefulWidget {
 
 class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
   int _currentIndex = 0;
-  List<String> images = [];
+  List<String?> images = [];
 
   @override
   Widget build(BuildContext context) {
-    images = [
-      widget.pilgrims[1].imageURL[0],
-      widget.pilgrims[0].imageURL[0],
-    ];
-
+    images = widget.pilgrims.map((pilgrim) {
+      if (pilgrim.popular == true) {
+        return pilgrim.imageURL[0];
+      }
+    }).toList();
+    List<int?> indices = widget.pilgrims.map((pilgrim) {
+      if (pilgrim.popular == true) {
+        return widget.pilgrims.indexOf(pilgrim);
+      }
+    }).toList();
+    images = images.where((element) => element != null).toList();
+    indices = indices.where((element) => element != null).toList();
     final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
@@ -37,9 +44,22 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                        image: DecorationImage(
-                            image: NetworkImage(item), fit: BoxFit.cover),
+                        color: Colors.white,
+                      ),
+                      child: Image.network(
+                        item!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            // Image is fully loaded
+                            return child;
+                          } else {
+                            // Display a loading indicator while the image is loading
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                        },
                       ),
                     ),
                     Padding(
@@ -79,11 +99,10 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                 aspectRatio: 2.0,
                 onPageChanged: (index, reason) {
                   setState(() {
-                    _currentIndex = index;
+                    _currentIndex = indices[index]!;
                   });
                 }),
           ),
-          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

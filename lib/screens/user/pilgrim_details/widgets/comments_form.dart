@@ -4,7 +4,7 @@ import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../../services/auth_services.dart';
+import '../../../../services/auth_services.dart';
 
 final AuthServices _auth = AuthServices();
 
@@ -56,7 +56,7 @@ class _CommentsFormState extends State<CommentsForm> {
                       pilgrimId: pilgrimId,
                       message: message);
 
-                  DatabaseComments().insertPilgrim(comment);
+                  DatabaseComments().insertComment(comment);
 
                   Navigator.pop(context);
                 }

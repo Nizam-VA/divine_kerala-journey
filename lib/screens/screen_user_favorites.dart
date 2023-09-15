@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/database/favorites_database.dart';
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/screens/pilgrim_details/screen_pilgrimes_details.dart';
-import 'package:devine_kerala_journey/screens/pilgrim_details/widgets/favorite_icon.dart';
-import 'package:devine_kerala_journey/screens/screen_login.dart';
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/screen_pilgrimes_details.dart';
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/widgets/favorite_icon.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenUserFavorites extends StatefulWidget {
   ScreenUserFavorites({super.key});
@@ -37,19 +35,6 @@ class _ScreenUserFavoritesState extends State<ScreenUserFavorites> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final _pref = await SharedPreferences.getInstance();
-              await _pref.clear();
-              await _auth.signOutOfGoogle(context);
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (ctx) => ScreenLogin()),
-                  (route) => false);
-            },
-            icon: const Icon(Icons.power_settings_new),
-          ),
-        ],
       ),
       body: Builder(builder: (context) {
         return SingleChildScrollView(
@@ -61,7 +46,7 @@ class _ScreenUserFavoritesState extends State<ScreenUserFavorites> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }

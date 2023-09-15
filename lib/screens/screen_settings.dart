@@ -1,4 +1,4 @@
-import 'package:devine_kerala_journey/screens/screen_login.dart';
+import 'package:devine_kerala_journey/screens/user/login/screen_login.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 

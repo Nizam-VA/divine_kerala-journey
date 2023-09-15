@@ -1,6 +1,6 @@
-import 'package:devine_kerala_journey/screens/screen_admin_home.dart';
-import 'package:devine_kerala_journey/screens/screen_signup.dart';
+import 'package:devine_kerala_journey/screens/admin/home/screen_admin_home.dart';
 import 'package:devine_kerala_journey/screens/screen_user.dart';
+import 'package:devine_kerala_journey/screens/user/login/widgets/create_account.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/shared/loading.dart';
@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenLogin extends StatefulWidget {
-  ScreenLogin({super.key});
-
+  const ScreenLogin({super.key});
   @override
   State<ScreenLogin> createState() => _ScreenLoginState();
 }
@@ -19,14 +18,13 @@ class _ScreenLoginState extends State<ScreenLogin> {
   AuthServices _auth = AuthServices();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-
   String email = '';
   String password = '';
   String error = '';
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
+        ? const Loading()
         : Scaffold(
             body: SingleChildScrollView(
               child: Padding(
@@ -37,12 +35,11 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         CircleAvatar(
-                          radius: 40,
-                          child: Image.asset(
-                              'assets/icons/divine-kerala-journey-logo.webp'),
-                        ),
+                            radius: 40,
+                            child: Image.asset(
+                                'assets/icons/divine-kerala-journey-logo.webp')),
                         TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -56,11 +53,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
                             });
                           },
                           decoration: const InputDecoration(
-                            hintText: 'E-mail id: ',
-                            hintStyle: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
+                              hintText: 'E-mail id: ',
+                              hintStyle: TextStyle(fontSize: 12)),
                         ),
                         TextFormField(
                           validator: (value) {
@@ -76,17 +70,13 @@ class _ScreenLoginState extends State<ScreenLogin> {
                           },
                           decoration: const InputDecoration(
                             hintText: 'Password: ',
-                            hintStyle: TextStyle(
-                              fontSize: 12,
-                            ),
+                            hintStyle: TextStyle(fontSize: 12),
                           ),
                         ),
-                        const SizedBox(
-                          height: 12,
-                        ),
+                        const SizedBox(height: 12),
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
                               bottomRight: Radius.circular(10),
@@ -112,93 +102,79 @@ class _ScreenLoginState extends State<ScreenLogin> {
                                   final _pref =
                                       await SharedPreferences.getInstance();
                                   await _pref.setBool(SAVE_KEY_NAME, true);
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (ctx) => ScreenAdminHome()));
+                                  if (_auth.firebaseAuth.currentUser!.email ==
+                                      'admin@co.in') {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                ScreenAdminHome()));
+                                  } else {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const ScreenUser()));
+                                  }
                                 }
                               }
                             },
-                            child: Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               elevation: 0,
                             ),
+                            child: const Text(
+                              'LOGIN',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
                           ),
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () async {
-                                  loading = true;
-                                  dynamic result = await _auth.signInAnon();
-                                  if (result == null) {
-                                    setState(() {
-                                      error = "You can't sign in anonymously";
-                                      loading = false;
-                                    });
-                                  } else {
-                                    final _pref =
-                                        await SharedPreferences.getInstance();
-                                    await _pref.setBool(SAVE_KEY_NAME, true);
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (ctx) => ScreenUser()));
-                                  }
-                                },
-                                child: const Text(
-                                  'Sign in anonymously',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                  ),
-                                  textAlign: TextAlign.end,
-                                ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () async {
+                                loading = true;
+                                dynamic result = await _auth.signInAnon();
+                                if (result == null) {
+                                  setState(() {
+                                    error = "You can't sign in anonymously";
+                                    loading = false;
+                                  });
+                                } else {
+                                  final _pref =
+                                      await SharedPreferences.getInstance();
+                                  await _pref.setBool(SAVE_KEY_NAME, true);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (ctx) => ScreenUser()));
+                                }
+                              },
+                              child: const Text(
+                                'Sign in anonymously',
+                                style: TextStyle(color: AppColors.primary),
+                                textAlign: TextAlign.end,
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (ctx) => ScreenSignUp(),
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Create account',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                  ),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            const CreateAccountButton(),
+                          ],
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Text(error,
-                            style: TextStyle(color: Colors.red, fontSize: 12)),
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 12)),
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: Row(
                             children: [
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Container(
                                   height: 1.0,
                                   width: MediaQuery.of(context).size.width / 5,
                                   color: Colors.grey,
                                 ),
                               ),
-                              const Text(
-                                'or sign in with',
-                              ),
+                              const Text('or sign in with'),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10.0),
@@ -224,7 +200,6 @@ class _ScreenLoginState extends State<ScreenLogin> {
                               loading = true;
                               dynamic result =
                                   await _auth.signInWithGoogle(context);
-
                               if (result == null) {
                                 setState(() {
                                   error = 'You cant sign in this account';
@@ -236,31 +211,25 @@ class _ScreenLoginState extends State<ScreenLogin> {
                                 await _pref.setBool(SAVE_KEY_NAME, true);
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                        builder: (ctx) => ScreenUser()));
+                                        builder: (ctx) => const ScreenUser()));
                               }
                             },
                             icon: Image.asset(
                               'assets/icons/search.png',
                               height: 16,
                             ),
-                            label: Text(
+                            label: const Text(
                               'Google',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                              ),
+                              style: TextStyle(color: AppColors.primary),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 12,
-                        ),
+                        const SizedBox(height: 12),
                         const Text(
-                            "By signing in , I agree to Divine Kerala journey's Terms and Prinvacy Plolicy",
+                            "By signing in , I agree to Divine Kerala journey's Terms and Privacy Policy",
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                            )),
-                        Spacer(),
+                            style: TextStyle(fontSize: 14)),
+                        const Spacer(),
                       ],
                     ),
                   ),
