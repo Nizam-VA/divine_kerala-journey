@@ -28,24 +28,25 @@ class _CarouselExploreKeralaState extends State<CarouselExploreKerala> {
         return widget.pilgrims.indexOf(pilgrim);
       }
     }).toList();
-    print(indices);
     images = images.where((element) {
       return element != null;
     }).toList();
     indices = indices.where((element) {
       return element != null;
     }).toList();
-    print(indices);
     final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
-              color: Colors.grey[300],
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[300],
+              ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Stack(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width - 30,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                       ),

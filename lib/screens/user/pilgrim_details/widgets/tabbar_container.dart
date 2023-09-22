@@ -1,7 +1,7 @@
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/widgets/tabbar_pilgrimage_details.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../styles/app_colors.dart';
-import '../../../../widgets/tabbar_pilgrimage_details.dart';
 import '../screen_pilgrimes_details.dart';
 
 class TabbarContainer extends StatelessWidget {

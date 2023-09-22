@@ -72,31 +72,3 @@ class _VideosState extends State<Videos> {
     ));
   }
 }
-
-/**child: SingleChildScrollView(
-            child: Column(
-              children: List.generate(_urls.length, (index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  height: MediaQuery.of(context).size.height / 5,
-                  width: MediaQuery.of(context).size.width / 1.2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: YoutubePlayer(
-                      thumbnail: const Text(''),
-                      controller: _controllers[index],
-                      showVideoProgressIndicator: true,
-                      progressColors: const ProgressBarColors(
-                        handleColor: Colors.indigo,
-                        playedColor: Colors.indigo,
-                        bufferedColor: Colors.grey,
-                      ),
-                      onReady: () => debugPrint(
-                        'Ready',
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ), */

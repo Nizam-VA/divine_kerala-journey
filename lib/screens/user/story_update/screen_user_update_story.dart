@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
-import 'package:devine_kerala_journey/screens/screen_storeis_view_all.dart';
-import 'package:devine_kerala_journey/screens/screen_user.dart';
+import 'package:devine_kerala_journey/screens/user/all_stories/screen_storeis_view_all.dart';
+import 'package:devine_kerala_journey/screens/user/main/screen_user.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../model/user_story.dart';
-import '../styles/app_colors.dart';
+import '../../../model/user_story.dart';
+import '../../../styles/app_colors.dart';
 
 class ScreenUserUpdateStory extends StatefulWidget {
   final UserStory userStory;

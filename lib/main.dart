@@ -1,6 +1,6 @@
 import 'package:devine_kerala_journey/database/favorites_database.dart';
-import 'package:devine_kerala_journey/screens/screen_user_image_gallery.dart';
-import 'package:devine_kerala_journey/screens/screensplash.dart';
+import 'package:devine_kerala_journey/screens/user/image_gallery/screen_user_image_gallery.dart';
+import 'package:devine_kerala_journey/screens/user/splash/screensplash.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

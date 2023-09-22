@@ -40,13 +40,15 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppColors.primary, width: .5),
                 ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    districtDropdown(),
-                    const SizedBox(height: 10),
-                    categoryButtons()
-                  ],
+                child: Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 2),
+                      districtDropdown(),
+                      const SizedBox(height: 10),
+                      categoryButtons()
+                    ],
+                  ),
                 ),
               ),
               PilgrimStreamBuilder(
@@ -104,7 +106,11 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
     return SizedBox(
       height: 60,
       child: DropdownButtonFormField(
-        decoration: inputDecoration.copyWith(labelText: 'Select district'),
+        decoration: inputDecoration.copyWith(
+          labelText: 'Select district',
+          disabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.primary)),
+        ),
         items: districts.map((dist) {
           return DropdownMenuItem(
             value: dist,
@@ -120,14 +126,15 @@ class _UserViewAllContainerState extends State<UserViewAllContainer> {
 
   SizedBox queryTextField() {
     return SizedBox(
-      height: 45,
+      height: 50,
       child: TextFormField(
         onChanged: (value) {
           setState(() {
             query = value;
           });
         },
-        decoration: inputDecorations(),
+        decoration:
+            inputDecorations().copyWith(contentPadding: EdgeInsets.all(20)),
       ),
     );
   }

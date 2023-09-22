@@ -42,7 +42,7 @@ class _CommentsFormState extends State<CommentsForm> {
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  String commentId = DateTime.now().toString();
+                  String commentId = DateTime.now().millisecond.toString();
                   String pilgrimId = widget.pilgrimId;
                   String userId = _auth.firebaseAuth.currentUser!.uid;
                   String message = _commentController.text;
@@ -57,7 +57,6 @@ class _CommentsFormState extends State<CommentsForm> {
                       message: message);
 
                   DatabaseComments().insertComment(comment);
-
                   Navigator.pop(context);
                 }
               },

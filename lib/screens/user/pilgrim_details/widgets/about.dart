@@ -1,12 +1,12 @@
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/screens/screen_view_map.dart';
+import 'package:devine_kerala_journey/screens/user/map/screen_view_map.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class About extends StatelessWidget {
-  PilgrimagesData pilgrim;
-  About({required this.pilgrim});
-  List<Icon> icons = [
+  final PilgrimagesData pilgrim;
+  About({super.key, required this.pilgrim});
+  List<Icon> icons = const [
     Icon(Icons.directions_bus),
     Icon(Icons.directions_railway_filled_outlined),
     Icon(Icons.flight)
@@ -18,17 +18,15 @@ class About extends StatelessWidget {
     return SingleChildScrollView(
       child: Container(
         child: Padding(
-          padding: EdgeInsets.all(18),
+          padding: const EdgeInsets.all(18),
           child: Column(
             children: [
               Text(
                 pilgrim.description,
                 textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontSize: 12,
-                ),
+                style: const TextStyle(fontSize: 12),
               ),
-              Divider(),
+              const Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -48,10 +46,8 @@ class About extends StatelessWidget {
                           backgroundColor: Colors.black,
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
-                            child: Image.asset(
-                              'assets/icons/send.png',
-                              height: 24,
-                            ),
+                            child: Image.asset('assets/icons/send.png',
+                                height: 24),
                           ),
                         ),
                       ),
@@ -70,9 +66,8 @@ class About extends StatelessWidget {
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
                             child: Image.asset(
-                              'assets/icons/maps-and-flags.png',
-                              height: 24,
-                            ),
+                                'assets/icons/maps-and-flags.png',
+                                height: 24),
                           ),
                         ),
                       ),
@@ -81,15 +76,12 @@ class About extends StatelessWidget {
                   ),
                 ],
               ),
-              Divider(),
+              const Divider(),
               Title(
                 color: Colors.black,
                 child: const Text(
                   'How to reach?',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -101,13 +93,9 @@ class About extends StatelessWidget {
                   pilgrim.air
                 ];
                 return ListTile(
-                  title: Text(
-                    description[index],
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
+                  title: Text(description[index],
+                      style: const TextStyle(fontSize: 12),
+                      textAlign: TextAlign.justify),
                   leading: Column(
                     children: [
                       CircleAvatar(

@@ -29,8 +29,10 @@ class _ScreenPilgrimesDetailsState extends State<ScreenPilgrimesDetails> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
-        title: Image.asset('assets/icons/divine-kerala-journey-logo.webp',
-            height: 24, color: Colors.white),
+        title: Text(
+          widget.pilgrim.place,
+          style: const TextStyle(color: Colors.white, fontSize: 18),
+        ),
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [

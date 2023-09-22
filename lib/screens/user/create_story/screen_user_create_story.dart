@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
 import 'package:devine_kerala_journey/model/user_story.dart';
-import 'package:devine_kerala_journey/screens/screen_user.dart';
+import 'package:devine_kerala_journey/screens/user/create_story/widgets/text_form_field.dart';
+import 'package:devine_kerala_journey/screens/user/main/screen_user.dart';
+import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,23 +18,8 @@ class ScreenUserCreateStory extends StatefulWidget {
 }
 
 class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
-  List<DropdownMenuItem<String>> get dropDownCatagories {
-    List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(
-          child: Text('Select Category'), value: 'Select Category'),
-      DropdownMenuItem(child: Text('Masjid'), value: 'Masjid'),
-      DropdownMenuItem(child: Text('Temple'), value: 'Temple'),
-      DropdownMenuItem(child: Text('Church'), value: 'Church'),
-      DropdownMenuItem(child: Text('Synagogue'), value: 'Synagogue'),
-      DropdownMenuItem(
-          child: Text('Historical Place'), value: 'Historical Place'),
-      DropdownMenuItem(child: Text('Others'), value: 'Others'),
-    ];
-    return menuItems;
-  }
-
   int count = 0;
-  var selectedCatagary = 'Select Category';
+  var selectedCategory = 'Select Category';
   final _formKey = GlobalKey<FormState>();
   final _placeController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -57,43 +44,28 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
+            InkWell(
+              onTap: () {
+                bottomSheet(context);
+              },
+              child: Container(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height / 3,
-                  color: Colors.grey[200],
-                  child: _imagePath != null
-                      ? Image(
-                          image: FileImage(
-                            File(
-                              _imagePath!,
-                            ),
-                          ),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
-                ),
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: AppColors.primary,
-                          width: .3,
-                        )),
-                    child: TextButton.icon(
-                      onPressed: () {
-                        bottomSheet(context);
-                      },
-                      icon: Icon(Icons.add_a_photo_outlined),
-                      label: Text('Add Images'),
-                    ),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(width: .5),
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        image: _imagePath != null
+                            ? FileImage(File(_imagePath!))
+                            : FileImage(File('')),
+                        fit: BoxFit.cover),
                   ),
-                ),
-              ],
+                  child: Center(
+                      child: _imagePath == null
+                          ? const Icon(Icons.add_a_photo_outlined,
+                              color: AppColors.primary, size: 50)
+                          : null)),
             ),
             Padding(
               padding: const EdgeInsets.all(16),
@@ -101,86 +73,37 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: _placeController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter the place name';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Place: ',
-                        hintStyle: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
                     const SizedBox(
                       width: double.infinity,
-                      child: Text(
-                        'Description:',
-                        textAlign: TextAlign.start,
-                      ),
+                      child: Text('Place:', textAlign: TextAlign.start),
                     ),
-                    TextFormField(
-                      controller: _descriptionController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter the description';
-                        }
-                        return null;
-                      },
-                      cursorHeight: 18,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            width: .1,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
+                    WidgetTextFormField(
+                        descriptionController: _placeController),
+                    const SizedBox(height: 12),
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Text('Description:', textAlign: TextAlign.start),
                     ),
+                    WidgetTextFormField(
+                        descriptionController: _descriptionController),
+                    const SizedBox(height: 12),
                     SizedBox(
-                      height: 12,
-                    ),
-                    Container(
                       width: MediaQuery.of(context).size.width,
                       child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: .2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(width: .2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
+                        decoration: inputDecoration.copyWith(
+                          labelText: 'Select category',
                         ),
-                        dropdownColor: Colors.white,
-                        value: selectedCatagary,
-                        onChanged: (String? newValue) {
-                          setState(
-                            () {
-                              selectedCatagary = newValue!;
-                            },
-                          );
-                        },
-                        items: dropDownCatagories,
+                        items: categories.map((cat) {
+                          return DropdownMenuItem(value: cat, child: Text(cat));
+                        }).toList(),
+                        onChanged: ((value) =>
+                            setState(() => selectedCategory = value!)),
                       ),
                     ),
-                    SizedBox(
-                      height: 12,
-                    ),
+                    const SizedBox(height: 36),
                     Container(
                       width: MediaQuery.of(context).size.width / 1.3,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
                           bottomRight: Radius.circular(10),
@@ -196,7 +119,7 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                               id: 0,
                               place: place,
                               description: description,
-                              category: selectedCatagary,
+                              category: selectedCategory,
                               images: _imagePath!,
                             );
                             widget.databaseHelper
@@ -206,11 +129,10 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                                 _placeController.text = '';
                                 _descriptionController.text = '';
                                 _imagePath = '';
-                                selectedCatagary = 'Select Category';
+                                selectedCategory = 'Select Category';
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                        'Data added successfully',
+                                  const SnackBar(
+                                    content: Text('Data added successfully',
                                         style: TextStyle(color: Colors.green)),
                                     backgroundColor: Colors.white,
                                     duration: Duration(seconds: 3),
@@ -218,7 +140,7 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                                 );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text(
                                       'Data didnt added',
                                       style: TextStyle(color: Colors.red),
@@ -236,19 +158,15 @@ class _ScreenUserCreateStoryState extends State<ScreenUserCreateStory> {
                             });
                           }
                         },
-                        child: Text(
-                          'SUBMIT',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          elevation: 0,
+                            backgroundColor: AppColors.primary, elevation: 0),
+                        child: const Text(
+                          'SUBMIT',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 48),
                   ],
                 ),
               ),

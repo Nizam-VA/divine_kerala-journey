@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devine_kerala_journey/database/stories_database_helper.dart';
 import 'package:devine_kerala_journey/model/user_story.dart';
-import 'package:devine_kerala_journey/screens/screen_about.dart';
+import 'package:devine_kerala_journey/screens/user/about/screen_about.dart';
 import 'package:devine_kerala_journey/screens/user/login/screen_login.dart';
-import 'package:devine_kerala_journey/screens/screen_settings.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';
 import 'package:devine_kerala_journey/styles/app_colors.dart';
@@ -13,7 +12,7 @@ import 'package:devine_kerala_journey/widgets/carousel_user_stories.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/pilgrimages_data.dart';
+import '../../../model/pilgrimages_data.dart';
 
 final AuthServices _auth = AuthServices();
 
@@ -44,14 +43,11 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
 
   @override
   Widget build(BuildContext context) {
-    final _uname = _auth.firebaseAuth.currentUser?.displayName;
-    final _uemail = _auth.firebaseAuth.currentUser?.email;
-
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection('pilgrims').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -81,25 +77,38 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                 color: Colors.white,
               ),
               centerTitle: true,
-              title: Image.asset(
-                'assets/icons/divine-kerala-journey-logo.webp',
-                color: Colors.white,
-                height: 24,
+              title: const Text(
+                'Divine Kerala Journey',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             drawer: openDrawer(context),
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 24,
-                  ),
+                  const SizedBox(height: 24),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      padding: EdgeInsets.symmetric(horizontal: 14),
+                      child: Text('Top Pilgrims',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                          textAlign: TextAlign.left),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  CarouselTopPilgrimes(pilgrims: pilgrims),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 14),
                       child: Text(
-                        'Top Pilgrims',
+                        'Explore Kerala',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 16),
                         textAlign: TextAlign.left,
@@ -107,42 +116,12 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  CarouselTopPilgrimes(pilgrims: pilgrims),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8,
-                      ),
-                      child: Text(
-                        'Explore Kerala',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
                   CarouselExploreKerala(pilgrims: pilgrims),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
+                  const SizedBox(height: 24),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 14),
                       child: Text(
                         'Your Stories',
                         style: TextStyle(
@@ -153,9 +132,7 @@ class _ScreenUserHomeState extends State<ScreenUserHome> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   CarouselUserStories(
                     userStories: userStories,
                   ),
@@ -190,12 +167,6 @@ Widget? openDrawer(BuildContext context) {
           decoration: const BoxDecoration(color: AppColors.primary),
         ),
         ListTile(
-          leading: const Icon(Icons.video_camera_back_outlined,
-              color: AppColors.primary),
-          title: const Text('Videos'),
-          onTap: () {},
-        ),
-        ListTile(
           leading: const Icon(Icons.photo, color: AppColors.primary),
           title: const Text('Photos'),
           onTap: () {
@@ -210,17 +181,6 @@ Widget? openDrawer(BuildContext context) {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (ctx) => const ScreenAbout(),
-              ),
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.settings, color: AppColors.primary),
-          title: const Text('Settings'),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (ctx) => ScreenSettings(),
               ),
             );
           },

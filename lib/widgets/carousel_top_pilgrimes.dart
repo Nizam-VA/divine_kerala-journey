@@ -35,13 +35,16 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
     final imageSliders = images
         .map((item) => Container(
               height: MediaQuery.of(context).size.height / 2,
-              color: Colors.grey[300],
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[300],
+              ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Stack(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width - 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
@@ -67,6 +70,12 @@ class _CarouselTopPilgrimesState extends State<CarouselTopPilgrimes> {
                       child: Text(
                         widget.pilgrims[_currentIndex].place,
                         style: const TextStyle(
+                            shadows: [
+                              Shadow(
+                                  color: Colors.black,
+                                  blurRadius: 40,
+                                  offset: Offset(0, 0))
+                            ],
                             color: AppColors.notFavorite,
                             fontSize: 16,
                             fontWeight: FontWeight.bold),

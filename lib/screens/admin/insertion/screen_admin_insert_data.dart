@@ -7,6 +7,9 @@ import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+String? place;
+int countImage = 0;
+
 class ScreenAdminInsertData extends StatefulWidget {
   const ScreenAdminInsertData({super.key});
 
@@ -15,12 +18,11 @@ class ScreenAdminInsertData extends StatefulWidget {
 }
 
 class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
-  int countImage = 0;
   int countLink = 0;
   final _formKey = GlobalKey<FormState>();
 
   String id = DateTime.now().toString();
-  String? place;
+
   String? location;
   String? description;
   String? district;
@@ -55,7 +57,7 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the place name:';
+                      return 'Enter the place name';
                     } else {
                       return null;
                     }
@@ -65,14 +67,12 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                       place = value;
                     });
                   },
-                  decoration: const InputDecoration(
-                    hintText: 'Place name: ',
-                  ),
+                  decoration: const InputDecoration(hintText: 'place'),
                 ),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the location:';
+                      return 'Enter the location';
                     } else {
                       return null;
                     }
@@ -82,65 +82,51 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                       location = value;
                     });
                   },
-                  decoration: const InputDecoration(
-                    hintText: 'Location: ',
-                  ),
+                  decoration: const InputDecoration(hintText: 'location'),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 const SizedBox(
                   width: double.infinity,
-                  child: Text(
-                    'Description:',
-                    textAlign: TextAlign.start,
-                  ),
+                  child: Text('Description:', textAlign: TextAlign.start),
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter the description about the place:';
-                    } else {
-                      return null;
+                    if (value == null || value.isEmpty) {
+                      return 'Enter the description';
                     }
+                    return null;
                   },
                   onChanged: (value) {
                     setState(() {
                       description = value;
                     });
                   },
+                  cursorHeight: 18,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          const BorderSide(width: .1, color: AppColors.primary),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 DropdownButtonFormField(
-                  decoration: inputDecoration.copyWith(label: Text('District')),
+                  decoration:
+                      inputDecoration.copyWith(label: const Text('District')),
                   value: districts[0],
                   items: districts.map((dist) {
-                    return DropdownMenuItem(
-                      child: Text('$dist'),
-                      value: dist,
-                    );
+                    return DropdownMenuItem(value: dist, child: Text(dist));
                   }).toList(),
                   onChanged: ((value) => setState(() => district = value!)),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 DropdownButtonFormField(
                   decoration:
                       inputDecoration.copyWith(label: const Text('Category')),
                   value: categories[0],
                   items: categories.map((cat) {
-                    return DropdownMenuItem(
-                      child: Text('$cat'),
-                      value: cat,
-                    );
+                    return DropdownMenuItem(value: cat, child: Text(cat));
                   }).toList(),
                   onChanged: ((value) => setState(() => category = value!)),
                 ),
@@ -151,96 +137,89 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                       popular = value!;
                     });
                   },
-                  title: Text('Popular'),
+                  title: const Text('popular'),
                 ),
                 const SizedBox(
                   width: double.infinity,
-                  child: Text(
-                    'Rail:',
-                    textAlign: TextAlign.start,
-                  ),
+                  child: Text('Rail:', textAlign: TextAlign.start),
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter the rail details:';
-                    } else {
-                      return null;
+                    if (value == null || value.isEmpty) {
+                      return 'Enter the rail details';
                     }
+                    return null;
                   },
                   onChanged: (value) {
                     setState(() {
                       rail = value;
                     });
                   },
+                  cursorHeight: 18,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          const BorderSide(width: .1, color: AppColors.primary),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 const SizedBox(
                   width: double.infinity,
-                  child: Text(
-                    'Road:',
-                    textAlign: TextAlign.start,
-                  ),
+                  child: Text('Road:', textAlign: TextAlign.start),
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter the road details:';
-                    } else {
-                      return null;
+                    if (value == null || value.isEmpty) {
+                      return 'Enter the road details';
                     }
+                    return null;
                   },
                   onChanged: (value) {
                     setState(() {
                       road = value;
                     });
                   },
+                  cursorHeight: 18,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          const BorderSide(width: .1, color: AppColors.primary),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 const SizedBox(
                   width: double.infinity,
-                  child: Text(
-                    'Air:',
-                    textAlign: TextAlign.start,
-                  ),
+                  child: Text('Air:', textAlign: TextAlign.start),
                 ),
                 TextFormField(
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter the air details:';
-                    } else {
-                      return null;
+                    if (value == null || value.isEmpty) {
+                      return 'Enter the air details';
                     }
+                    return null;
                   },
                   onChanged: (value) {
                     setState(() {
                       air = value;
                     });
                   },
+                  cursorHeight: 18,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          const BorderSide(width: .1, color: AppColors.primary),
                     ),
                   ),
                 ),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the latitude of the place:';
+                      return 'Enter the latitude';
                     } else {
                       return null;
                     }
@@ -250,14 +229,12 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                       latitude = value;
                     });
                   },
-                  decoration: const InputDecoration(
-                    hintText: 'Latitude:  ',
-                  ),
+                  decoration: const InputDecoration(hintText: 'latitude'),
                 ),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Enter the longitude of the the place:';
+                      return 'Enter the longitude';
                     } else {
                       return null;
                     }
@@ -267,7 +244,7 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                       longitude = value;
                     });
                   },
-                  decoration: const InputDecoration(hintText: 'Longitude: '),
+                  decoration: const InputDecoration(hintText: 'longitude'),
                 ),
                 const SizedBox(height: 12),
                 Column(
@@ -313,23 +290,17 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                     ),
                   );
                 })),
-                const SizedBox(
-                  height: 12,
-                ),
+                const SizedBox(height: 12),
                 TextButton.icon(
                   onPressed: () async {
-                    await bottomSheet(context).then(
-                      (value) {
-                        setState(() {
-                          countImage++;
-                        });
-                      },
-                    );
+                    await bottomSheet(context).then((value) {
+                      setState(() {
+                        countImage++;
+                      });
+                    });
                   },
-                  icon: Icon(Icons.add),
-                  label: const Text(
-                    'Add Image',
-                  ),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add Image'),
                 ),
                 Column(
                     children: List.generate(countLink, (index) {
@@ -372,10 +343,7 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                             child: CircleAvatar(
                               backgroundColor: Colors.white,
                               radius: 12,
-                              child: Icon(
-                                Icons.remove,
-                                color: Colors.red,
-                              ),
+                              child: Icon(Icons.remove, color: Colors.red),
                             ),
                           ),
                         )
@@ -428,7 +396,7 @@ class _ScreenAdminInsertDataState extends State<ScreenAdminInsertData> {
                       backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                     ),
-                    child: Text('Save'),
+                    child: const Text('Save'),
                   ),
                 ),
               ],

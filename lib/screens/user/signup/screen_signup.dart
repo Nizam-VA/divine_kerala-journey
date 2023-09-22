@@ -1,4 +1,4 @@
-import 'package:devine_kerala_journey/screens/screen_user.dart';
+import 'package:devine_kerala_journey/screens/user/main/screen_user.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/services/database_services.dart';
 import 'package:devine_kerala_journey/shared/loading.dart';
@@ -6,7 +6,7 @@ import 'package:devine_kerala_journey/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../shared/constants.dart';
+import '../../../shared/constants.dart';
 
 class ScreenSignUp extends StatefulWidget {
   ScreenSignUp({super.key});

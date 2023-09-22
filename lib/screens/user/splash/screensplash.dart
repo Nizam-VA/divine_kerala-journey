@@ -1,9 +1,9 @@
-import 'package:devine_kerala_journey/screens/screen_user.dart';
 import 'package:devine_kerala_journey/screens/user/login/screen_login.dart';
+import 'package:devine_kerala_journey/screens/user/main/screen_user.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../shared/constants.dart';
+import '../../../shared/constants.dart';
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({super.key});

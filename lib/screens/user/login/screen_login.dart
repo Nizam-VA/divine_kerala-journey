@@ -1,5 +1,5 @@
 import 'package:devine_kerala_journey/screens/admin/home/screen_admin_home.dart';
-import 'package:devine_kerala_journey/screens/screen_user.dart';
+import 'package:devine_kerala_journey/screens/user/main/screen_user.dart';
 import 'package:devine_kerala_journey/screens/user/login/widgets/create_account.dart';
 import 'package:devine_kerala_journey/services/auth_services.dart';
 import 'package:devine_kerala_journey/shared/constants.dart';

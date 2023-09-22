@@ -1,10 +1,10 @@
 import 'package:devine_kerala_journey/model/pilgrimages_data.dart';
-import 'package:devine_kerala_journey/widgets/comments.dart';
-import 'package:devine_kerala_journey/widgets/photos.dart';
-import 'package:devine_kerala_journey/widgets/videos.dart';
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/widgets/photos.dart';
+import 'package:devine_kerala_journey/screens/user/pilgrim_details/widgets/videos.dart';
 import 'package:flutter/material.dart';
 
 import 'about.dart';
+import 'comments.dart';
 
 class TabBarPilgrimageDetails extends StatefulWidget {
   final PilgrimagesData pilgrim;
@@ -20,7 +20,7 @@ class _TabBarPilgrimageDetailsState extends State<TabBarPilgrimageDetails> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,
-      child: Container(
+      child: SizedBox(
         height: MediaQuery.of(context).size.height * 0.69,
         child: Column(
           children: [
@@ -28,7 +28,7 @@ class _TabBarPilgrimageDetailsState extends State<TabBarPilgrimageDetails> {
               Tab(text: 'About'),
               Tab(text: 'Photos'),
               Tab(text: 'Videos'),
-              Tab(text: 'Comments')
+              Tab(text: 'Reviews')
             ]),
             Expanded(
               child: TabBarView(
